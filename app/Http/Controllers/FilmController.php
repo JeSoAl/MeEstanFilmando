@@ -12,7 +12,7 @@ use App\Models\FilmGenre;
 use App\Models\FilmAward;
 use App\Models\FilmPlatform;
 use App\Http\Controllers\Controller;
-use App\Services\films\FilmsService;
+use App\Services\FilmsService;
 use Illuminate\Http\Request;
 
 class FilmController extends Controller

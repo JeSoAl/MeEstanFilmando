@@ -4,16 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Award;
 use App\Http\Controllers\Controller;
+use App\Services\AwardsService;
 use Illuminate\Http\Request;
 
 class AwardController extends Controller
 {
+    private $awardsService;
+
+    public function __construct(AwardsService $awardsService)
+    {
+        $this->awardsService = $awardsService;
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $awards = $this->awardsService->search($request)->get();
+        return view('awards.index', compact('awards', 'request'));
     }
 
     /**
@@ -21,7 +30,8 @@ class AwardController extends Controller
      */
     public function create()
     {
-        //
+        $award = new Award();
+        return view('awards.create', compact('awards'));
     }
 
     /**
@@ -29,7 +39,10 @@ class AwardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $award = Award::create($request->all());
+        $award->save();
+
+        return to_route('awards.index');
     }
 
     /**
@@ -45,7 +58,7 @@ class AwardController extends Controller
      */
     public function edit(Award $award)
     {
-        //
+        return view('awards.edit', compact('award'));
     }
 
     /**
@@ -53,7 +66,9 @@ class AwardController extends Controller
      */
     public function update(Request $request, Award $award)
     {
-        //
+        $award->update($request->all());
+
+        return to_route('awards.index');
     }
 
     /**
@@ -61,6 +76,7 @@ class AwardController extends Controller
      */
     public function destroy(Award $award)
     {
-        //
+        $award->delete();
+        return to_route('awards.index');
     }
 }

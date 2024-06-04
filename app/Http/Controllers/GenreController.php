@@ -4,16 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Genre;
 use App\Http\Controllers\Controller;
+use App\Services\GenresService;
 use Illuminate\Http\Request;
 
 class GenreController extends Controller
 {
+    private $genresService;
+
+    public function __construct(GenresService $genresService)
+    {
+        $this->genresService = $genresService;
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $genres = $this->genresService->search($request)->get();
+        return view('genres.index', compact('genres', 'request'));
     }
 
     /**
@@ -21,7 +30,8 @@ class GenreController extends Controller
      */
     public function create()
     {
-        //
+        $genre = new Genre();
+        return view('genres.create', compact('genres'));
     }
 
     /**
@@ -29,7 +39,10 @@ class GenreController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $genre = Genre::create($request->all());
+        $genre->save();
+
+        return to_route('genres.index');
     }
 
     /**
@@ -45,7 +58,7 @@ class GenreController extends Controller
      */
     public function edit(Genre $genre)
     {
-        //
+        return view('genres.edit', compact('genre'));
     }
 
     /**
@@ -53,7 +66,9 @@ class GenreController extends Controller
      */
     public function update(Request $request, Genre $genre)
     {
-        //
+        $genre->update($request->all());
+
+        return to_route('genres.index');
     }
 
     /**
@@ -61,6 +76,7 @@ class GenreController extends Controller
      */
     public function destroy(Genre $genre)
     {
-        //
+        $genre->delete();
+        return to_route('genres.index');
     }
 }

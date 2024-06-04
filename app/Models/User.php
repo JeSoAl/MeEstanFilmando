@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'password',
         'suscription',
+        'admin',
         'avatar_id',
         'suscription_id'
     ];

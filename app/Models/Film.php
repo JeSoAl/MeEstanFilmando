@@ -23,6 +23,7 @@ class Film extends Model
         'description',
         'duration',
         'year',
+        'position',
         'picture',
         'director_id'
     ];

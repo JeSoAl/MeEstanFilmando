@@ -4,16 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Avatar;
 use App\Http\Controllers\Controller;
+use App\Services\AvatarsService;
 use Illuminate\Http\Request;
 
 class AvatarController extends Controller
 {
+    private $avatarsService;
+
+    public function __construct(AvatarsService $avatarsService)
+    {
+        $this->avatarsService = $avatarsService;
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $avatars = $this->avatarsService->search($request)->get();
+        return view('avatars.index', compact('avatars', 'request'));
     }
 
     /**
@@ -21,7 +30,8 @@ class AvatarController extends Controller
      */
     public function create()
     {
-        //
+        $avatar = new Avatar();
+        return view('avatars.create', compact('avatars'));
     }
 
     /**
@@ -29,7 +39,10 @@ class AvatarController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $avatar = Avatar::create($request->all());
+        $avatar->save();
+
+        return to_route('avatars.index');
     }
 
     /**
@@ -45,7 +58,7 @@ class AvatarController extends Controller
      */
     public function edit(Avatar $avatar)
     {
-        //
+        return view('avatars.edit', compact('avatar'));
     }
 
     /**
@@ -53,7 +66,9 @@ class AvatarController extends Controller
      */
     public function update(Request $request, Avatar $avatar)
     {
-        //
+        $avatar->update($request->all());
+
+        return to_route('avatars.index');
     }
 
     /**
@@ -61,6 +76,7 @@ class AvatarController extends Controller
      */
     public function destroy(Avatar $avatar)
     {
-        //
+        $avatar->delete();
+        return to_route('avatars.index');
     }
 }

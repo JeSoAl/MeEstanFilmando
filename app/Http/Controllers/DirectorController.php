@@ -4,16 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Director;
 use App\Http\Controllers\Controller;
+use App\Services\DirectorsService;
 use Illuminate\Http\Request;
 
 class DirectorController extends Controller
 {
+    private $directorsService;
+
+    public function __construct(DirectorsService $directorsService)
+    {
+        $this->directorsService = $directorsService;
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $directors = $this->directorsService->search($request)->get();
+        return view('directors.index', compact('directors', 'request'));
     }
 
     /**
@@ -21,7 +30,8 @@ class DirectorController extends Controller
      */
     public function create()
     {
-        //
+        $director = new Director();
+        return view('directors.create', compact('directors'));
     }
 
     /**
@@ -29,7 +39,10 @@ class DirectorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $director = Director::create($request->all());
+        $director->save();
+
+        return to_route('directors.index');
     }
 
     /**
@@ -45,7 +58,7 @@ class DirectorController extends Controller
      */
     public function edit(Director $director)
     {
-        //
+        return view('directors.edit', compact('director'));
     }
 
     /**
@@ -53,7 +66,9 @@ class DirectorController extends Controller
      */
     public function update(Request $request, Director $director)
     {
-        //
+        $director->update($request->all());
+
+        return to_route('directors.index');
     }
 
     /**
@@ -61,6 +76,7 @@ class DirectorController extends Controller
      */
     public function destroy(Director $director)
     {
-        //
+        $director->delete();
+        return to_route('directors.index');
     }
 }

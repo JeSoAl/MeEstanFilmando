@@ -4,16 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Actor;
 use App\Http\Controllers\Controller;
+use App\Services\ActorsService;
 use Illuminate\Http\Request;
 
 class ActorController extends Controller
 {
+    private $actorsService;
+
+    public function __construct(ActorsService $actorsService)
+    {
+        $this->actorsService = $actorsService;
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $actors = $this->actorsService->search($request)->get();
+        return view('actors.index', compact('actors', 'request'));
     }
 
     /**
@@ -21,7 +30,8 @@ class ActorController extends Controller
      */
     public function create()
     {
-        //
+        $actor = new Actor();
+        return view('actors.create', compact('actors'));
     }
 
     /**
@@ -29,7 +39,10 @@ class ActorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $actor = Actor::create($request->all());
+        $actor->save();
+
+        return to_route('actors.index');
     }
 
     /**
@@ -45,7 +58,7 @@ class ActorController extends Controller
      */
     public function edit(Actor $actor)
     {
-        //
+        return view('actors.edit', compact('actor'));
     }
 
     /**
@@ -53,7 +66,9 @@ class ActorController extends Controller
      */
     public function update(Request $request, Actor $actor)
     {
-        //
+        $actor->update($request->all());
+
+        return to_route('actors.index');
     }
 
     /**
@@ -61,6 +76,7 @@ class ActorController extends Controller
      */
     public function destroy(Actor $actor)
     {
-        //
+        $actor->delete();
+        return to_route('actors.index');
     }
 }

@@ -4,16 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Platform;
 use App\Http\Controllers\Controller;
+use App\Services\PlatformsService;
 use Illuminate\Http\Request;
 
 class PlatformController extends Controller
 {
+    private $platformsService;
+
+    public function __construct(PlatformsService $platformsService)
+    {
+        $this->platformsService = $platformsService;
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $platforms = $this->platformsService->search($request)->get();
+        return view('platforms.index', compact('platforms', 'request'));
     }
 
     /**
@@ -21,7 +30,8 @@ class PlatformController extends Controller
      */
     public function create()
     {
-        //
+        $platform = new Platform();
+        return view('platforms.create', compact('platforms'));
     }
 
     /**
@@ -29,7 +39,10 @@ class PlatformController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $platform = Platform::create($request->all());
+        $platform->save();
+
+        return to_route('platforms.index');
     }
 
     /**
@@ -45,7 +58,7 @@ class PlatformController extends Controller
      */
     public function edit(Platform $platform)
     {
-        //
+        return view('platforms.edit', compact('platform'));
     }
 
     /**
@@ -53,7 +66,9 @@ class PlatformController extends Controller
      */
     public function update(Request $request, Platform $platform)
     {
-        //
+        $platform->update($request->all());
+
+        return to_route('platforms.index');
     }
 
     /**
@@ -61,6 +76,7 @@ class PlatformController extends Controller
      */
     public function destroy(Platform $platform)
     {
-        //
+        $platform->delete();
+        return to_route('platforms.index');
     }
 }

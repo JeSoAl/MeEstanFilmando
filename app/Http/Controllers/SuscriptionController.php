@@ -4,16 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Suscription;
 use App\Http\Controllers\Controller;
+use App\Services\SuscriptionsService;
 use Illuminate\Http\Request;
 
 class SuscriptionController extends Controller
 {
+    private $suscriptionsService;
+
+    public function __construct(SuscriptionsService $suscriptionsService)
+    {
+        $this->suscriptionsService = $suscriptionsService;
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $suscriptions = $this->suscriptionsService->search($request)->get();
+        return view('suscriptions.index', compact('suscriptions', 'request'));
     }
 
     /**
@@ -21,7 +30,8 @@ class SuscriptionController extends Controller
      */
     public function create()
     {
-        //
+        $suscription = new Suscription();
+        return view('suscriptions.create', compact('suscriptions'));
     }
 
     /**
@@ -29,7 +39,10 @@ class SuscriptionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $suscription = Suscription::create($request->all());
+        $suscription->save();
+
+        return to_route('suscriptions.index');
     }
 
     /**
@@ -45,7 +58,7 @@ class SuscriptionController extends Controller
      */
     public function edit(Suscription $suscription)
     {
-        //
+        return view('suscriptions.edit', compact('suscription'));
     }
 
     /**
@@ -53,7 +66,9 @@ class SuscriptionController extends Controller
      */
     public function update(Request $request, Suscription $suscription)
     {
-        //
+        $suscription->update($request->all());
+
+        return to_route('suscriptions.index');
     }
 
     /**
@@ -61,6 +76,7 @@ class SuscriptionController extends Controller
      */
     public function destroy(Suscription $suscription)
     {
-        //
+        $suscription->delete();
+        return to_route('suscriptions.index');
     }
 }
