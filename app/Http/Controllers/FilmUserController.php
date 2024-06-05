@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FilmUser;
 use App\Models\Film;
-use App\Models\User;
 use App\Models\Actor;
 use App\Models\Director;
 use App\Models\Award;
 use App\Models\Platform;
-use App\Models\FilmUser;
 use App\Models\FilmActor;
 use App\Models\FilmGenre;
 use App\Models\FilmAward;
@@ -27,9 +26,109 @@ class FilmController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        $directors = Director::all();
+        $actors = Actor::all();
+        $genres = Genre::all();
+        $awards = Award::all();
+        $platforms = Platform::all();
+        $films = $this->filmsService->search($request)->get();
+        return view('admin.films.index', compact('films', 'genres', 'awards', 'actors', 'directors', 'platforms', 'request'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $films = Film::all();
+        $directors = Director::all();
+        $actors = Actor::all();
+        $genres = Genre::all();
+        $awards = Award::all();
+        $platforms = Platform::all();
+        $filmUser = new Film();
+        return view('admin.films.create', compact('filmUser', 'films', 'genres', 'actors', 'awards', 'directors', 'platforms'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request, User $user)
+    {
+        $genres = Genre::all();
+        $filters = [];
+        $film = Film::create($request->all());
+        $film->save();
+
+        // Iterar géneros
+        foreach ($genres as $genre) {
+            if (isset($request->input($genre->id .'radio'))) {
+                if ($request->input($genre->id .'radio') == 'yes') {
+                    $userGenre = new UserGenre();
+                    $userGenre->user_id = $user->id;
+                    $userGenre->genre_id = $genre->id;
+                    $userGenre->type = true;
+                    $userGenre->save();
+                }
+                else if ($request->input($genre->id .'radio') == 'no') {
+                    $userGenre = new UserGenre();
+                    $userGenre->user_id = $user->id;
+                    $userGenre->genre_id = $genre->id;
+                    $usergenre->type = false;
+                    $userGenre->save();
+                }
+            }
+            else {
+                if (isset($request->input($genre->id .'checkboxYes')) && $request->input($genre->id .'checkboxYes') == true) {
+                    $userGenre = new UserGenre();
+                    $userGenre->user_id = $user->id;
+                    $userGenre->genre_id = $genre->id;
+                    $userGenre->type = true;
+                    $userGenre->save();
+                }
+                else if (isset($request->input($genre->id .'checkboxNo')) && $request->input($genre->id .'checkboxNo') == true) {
+                    $userGenre = new UserGenre();
+                    $userGenre->user_id = $user->id;
+                    $userGenre->genre_id = $genre->id;
+                    $usergenre->type = false;
+                    $userGenre->save();
+                }
+            }
+        }
+
+        $userGenres = UserGenre::where('user_id', $user->id)->where('type', 'true');
+        $films = Film::whereIn('genre_id', $user->genre_ids())->where('ty')->inRandomOrder()->limit(15)->get(); 
+        $films = Film::all();
+        $films->where(function ($q) {
+            $i = 0;
+            foreach ($userGenres as $userGenre) {
+                if ($i == 0) {
+                    $q->Where('id', $userGenre->genre_id);
+                }
+                else {
+                    $q->orWhere('id', $userGenre->genre_id);
+                }
+                $i++;
+            }
+        })->inRandomOrder();
+        foreach ($films as $film) {
+            $filmUser = new FilmUser();
+            $filmUser->user_id = $user->id;
+            $filmUser->film_id = $film->id;
+            $filmUser->save();
+        }
+
+        return to_route('admin.films.index');
+    }
+
+    /**
      * Display the specified resource.
      */
-    public function show(Film $film, User $user)
+    public function show(Film $film)
     {
         $directors = Director::all();
         $actors = Actor::all();
@@ -40,7 +139,7 @@ class FilmController extends Controller
         $filmActors = $film->actors()->get();
         $filmAwards = $film->awards()->get();
         $filmPlatforms = $film->platforms()->get();
-        return view('films.show', compact('film', 'user', 'genres', 'actors', 'awards', 'directors', 'platforms', 'filmGenres', 'filmActors', 'filmAwards', 'filmPlatforms'));
+        return view('admin.films.show', compact('film', 'genres', 'actors', 'awards', 'directors', 'platforms', 'filmGenres', 'filmActors', 'filmAwards', 'filmPlatforms'));
     }
 
     /**
@@ -57,15 +156,14 @@ class FilmController extends Controller
         $filmActors = $film->actors()->get();
         $filmAwards = $film->awards()->get();
         $filmPlatforms = $film->platforms()->get();
-        return view('films.edit', compact('film', 'genres', 'actors', 'awards', 'directors', 'platforms', 'filmGenres', 'filmActors', 'filmAwards', 'filmPlatforms'));
+        return view('admin.films.edit', compact('film', 'genres', 'actors', 'awards', 'directors', 'platforms', 'filmGenres', 'filmActors', 'filmAwards', 'filmPlatforms'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Film $film, User $user)
+    public function update(Request $request, Film $film)
     {
-        $filmUsers = FilmUser::get()->where('film_id', $film->id)->where('user_id', $user->id);
         $film->update($request->all());
 
         // Iterar $request->input('filmGenres')
@@ -178,16 +276,15 @@ class FilmController extends Controller
             }
         }
 
-        return to_route('films.index');
+        return to_route('admin.films.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Film $film, User $user)
+    public function destroy(Film $film)
     {
-        $filmUsers = FilmUser::all();
-        $filmUsers->where('film_id', $film->id)->where('user_id', $user->id)->delete();
-        return to_route('films.show');
+        $film->delete();
+        return to_route('admin.films.index');
     }
 }

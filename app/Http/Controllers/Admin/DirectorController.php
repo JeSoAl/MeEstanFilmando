@@ -22,7 +22,7 @@ class DirectorController extends Controller
     public function index(Request $request)
     {
         $directors = $this->directorsService->search($request)->get();
-        return view('directors.index', compact('directors', 'request'));
+        return view('admin.directors.index', compact('directors', 'request'));
     }
 
     /**
@@ -31,7 +31,7 @@ class DirectorController extends Controller
     public function create()
     {
         $director = new Director();
-        return view('directors.create', compact('directors'));
+        return view('admin.directors.create', compact('director'));
     }
 
     /**
@@ -42,7 +42,7 @@ class DirectorController extends Controller
         $director = Director::create($request->all());
         $director->save();
 
-        return to_route('directors.index');
+        return to_route('admin.directors.index');
     }
 
     /**
@@ -58,7 +58,7 @@ class DirectorController extends Controller
      */
     public function edit(Director $director)
     {
-        return view('directors.edit', compact('director'));
+        return view('admin.directors.edit', compact('director'));
     }
 
     /**
@@ -68,7 +68,7 @@ class DirectorController extends Controller
     {
         $director->update($request->all());
 
-        return to_route('directors.index');
+        return to_route('admin.directors.index');
     }
 
     /**
@@ -77,6 +77,6 @@ class DirectorController extends Controller
     public function destroy(Director $director)
     {
         $director->delete();
-        return to_route('directors.index');
+        return to_route('admin.directors.index');
     }
 }

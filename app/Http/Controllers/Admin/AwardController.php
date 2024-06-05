@@ -22,7 +22,7 @@ class AwardController extends Controller
     public function index(Request $request)
     {
         $awards = $this->awardsService->search($request)->get();
-        return view('awards.index', compact('awards', 'request'));
+        return view('admin.awards.index', compact('awards', 'request'));
     }
 
     /**
@@ -31,7 +31,7 @@ class AwardController extends Controller
     public function create()
     {
         $award = new Award();
-        return view('awards.create', compact('awards'));
+        return view('admin.awards.create', compact('award'));
     }
 
     /**
@@ -42,7 +42,7 @@ class AwardController extends Controller
         $award = Award::create($request->all());
         $award->save();
 
-        return to_route('awards.index');
+        return to_route('admin.awards.index');
     }
 
     /**
@@ -58,7 +58,7 @@ class AwardController extends Controller
      */
     public function edit(Award $award)
     {
-        return view('awards.edit', compact('award'));
+        return view('admin.awards.edit', compact('award'));
     }
 
     /**
@@ -68,7 +68,7 @@ class AwardController extends Controller
     {
         $award->update($request->all());
 
-        return to_route('awards.index');
+        return to_route('admin.awards.index');
     }
 
     /**
@@ -77,6 +77,6 @@ class AwardController extends Controller
     public function destroy(Award $award)
     {
         $award->delete();
-        return to_route('awards.index');
+        return to_route('admin.awards.index');
     }
 }

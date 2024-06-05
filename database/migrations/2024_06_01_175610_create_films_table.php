@@ -21,7 +21,7 @@ return new class extends Migration
             $table->year('year');
             $table->integer('position');
             $table->string('picture')->nullable();
-            $table->foreign('director_id')->references('id')->on('directors')->onDelete('cascade');
+            $table->foreign('director_id')->references('id')->on('directors')->onDelete('cascade')->nullable();
             $table->timestamps();
         });
     }

@@ -22,7 +22,7 @@ class GenreController extends Controller
     public function index(Request $request)
     {
         $genres = $this->genresService->search($request)->get();
-        return view('genres.index', compact('genres', 'request'));
+        return view('admin.genres.index', compact('genres', 'request'));
     }
 
     /**
@@ -31,7 +31,7 @@ class GenreController extends Controller
     public function create()
     {
         $genre = new Genre();
-        return view('genres.create', compact('genres'));
+        return view('admin.genres.create', compact('genre'));
     }
 
     /**
@@ -42,7 +42,7 @@ class GenreController extends Controller
         $genre = Genre::create($request->all());
         $genre->save();
 
-        return to_route('genres.index');
+        return to_route('admin.genres.index');
     }
 
     /**
@@ -58,7 +58,7 @@ class GenreController extends Controller
      */
     public function edit(Genre $genre)
     {
-        return view('genres.edit', compact('genre'));
+        return view('admin.genres.edit', compact('genre'));
     }
 
     /**
@@ -68,7 +68,7 @@ class GenreController extends Controller
     {
         $genre->update($request->all());
 
-        return to_route('genres.index');
+        return to_route('admin.genres.index');
     }
 
     /**
@@ -77,6 +77,6 @@ class GenreController extends Controller
     public function destroy(Genre $genre)
     {
         $genre->delete();
-        return to_route('genres.index');
+        return to_route('admin.genres.index');
     }
 }

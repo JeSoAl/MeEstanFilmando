@@ -20,6 +20,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('suscription')->default(false);
+            $table->boolean('recomendation')->default(false);
             $table->boolean('admin')->default(false);
             $table->rememberToken();
             $table->foreign('avatar_id')->references('id')->on('avatars')->onDelete('cascade')->nullable();

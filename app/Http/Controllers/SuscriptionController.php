@@ -3,25 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Suscription;
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Services\SuscriptionsService;
 use Illuminate\Http\Request;
 
 class SuscriptionController extends Controller
 {
-    private $suscriptionsService;
-
-    public function __construct(SuscriptionsService $suscriptionsService)
-    {
-        $this->suscriptionsService = $suscriptionsService;
-    }
-
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $suscriptions = $this->suscriptionsService->search($request)->get();
+        $suscriptions = Suscription::all();
         return view('suscriptions.index', compact('suscriptions', 'request'));
     }
 
@@ -30,19 +24,15 @@ class SuscriptionController extends Controller
      */
     public function create()
     {
-        $suscription = new Suscription();
-        return view('suscriptions.create', compact('suscriptions'));
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, User $user)
     {
-        $suscription = Suscription::create($request->all());
-        $suscription->save();
-
-        return to_route('suscriptions.index');
+        //
     }
 
     /**
@@ -56,27 +46,32 @@ class SuscriptionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Suscription $suscription)
+    public function edit(Suscription $suscription, User $user)
     {
-        return view('suscriptions.edit', compact('suscription'));
+        return view('suscriptions.edit', compact('suscription', 'user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Suscription $suscription)
+    public function update(Request $request, Suscription $suscription, User $user)
     {
-        $suscription->update($request->all());
+        $user->suscription_id = $suscription->id;
+        $user->suscription = true;
+        $user->update();
 
-        return to_route('suscriptions.index');
+        return to_route('suscriptions.suscribed');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Suscription $suscription)
+    public function destroy(User $user)
     {
-        $suscription->delete();
-        return to_route('suscriptions.index');
+        $user->suscription_id = null;
+        $user->suscription = false;
+        $user->update();
+        
+        return to_route('suscriptions.unsuscribed');
     }
 }

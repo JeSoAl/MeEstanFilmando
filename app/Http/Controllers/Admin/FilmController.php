@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Film;
-use App\Models\User;
 use App\Models\Actor;
 use App\Models\Director;
 use App\Models\Award;
 use App\Models\Platform;
-use App\Models\FilmUser;
 use App\Models\FilmActor;
 use App\Models\FilmGenre;
 use App\Models\FilmAward;
@@ -27,9 +25,90 @@ class FilmController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        $directors = Director::all();
+        $actors = Actor::all();
+        $genres = Genre::all();
+        $awards = Award::all();
+        $platforms = Platform::all();
+        $films = $this->filmsService->search($request)->get();
+        return view('admin.films.index', compact('films', 'genres', 'awards', 'actors', 'directors', 'platforms', 'request'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $directors = Director::all();
+        $actors = Actor::all();
+        $genres = Genre::all();
+        $awards = Award::all();
+        $platforms = Platform::all();
+        $film = new Film();
+        return view('admin.films.create', compact('film', 'genres', 'actors', 'awards', 'directors', 'platforms'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $film = Film::create($request->all());
+        $film->save();
+
+        // Iterar $request->input('filmGenres')
+        if ($request->input('filmGenres')) {
+            foreach ($request->input('filmGenres') as $key => $value) {
+                $filmGenre = new FilmGenre();
+                $filmGenre->genre_id = $value['genre_id'];
+                $filmGenre->film_id = $film->id;
+                $filmGenre->save();
+            }
+        }
+
+        // Iterar $request->input('filmActors')
+        if ($request->input('filmActors')) {
+            foreach ($request->input('filmActors') as $key => $value) {
+                $filmActor = new FilmActor();
+                $filmActor->actor_id = $value['actor_id'];
+                $filmActor->film_id = $film->id;
+                $filmActor->save();
+            }
+        }
+
+        // Iterar $request->input('filmAwards')
+        if ($request->input('filmAwards')) {
+            foreach ($request->input('filmAwards') as $key => $value) {
+                $filmAward = new FilmAward();
+                $filmAward->number = $value['number'];
+                $filmAward->award_id = $value['award_id'];
+                $filmAward->film_id = $film->id;
+                $filmAward->save();
+            }
+        }
+
+        // Iterar $request->input('filmPlatforms')
+        if ($request->input('filmPlatforms')) {
+            foreach ($request->input('filmPlatforms') as $key => $value) {
+                $filmPlatform = new FilmPlatform();
+                $filmPlatform->number = $value['number'];
+                $filmPlatform->platform_id = $value['platform_id'];
+                $filmPlatform->film_id = $film->id;
+                $filmPlatform->save();
+            }
+        }
+
+        return to_route('admin.films.index');
+    }
+
+    /**
      * Display the specified resource.
      */
-    public function show(Film $film, User $user)
+    public function show(Film $film)
     {
         $directors = Director::all();
         $actors = Actor::all();
@@ -40,7 +119,7 @@ class FilmController extends Controller
         $filmActors = $film->actors()->get();
         $filmAwards = $film->awards()->get();
         $filmPlatforms = $film->platforms()->get();
-        return view('films.show', compact('film', 'user', 'genres', 'actors', 'awards', 'directors', 'platforms', 'filmGenres', 'filmActors', 'filmAwards', 'filmPlatforms'));
+        return view('admin.films.show', compact('film', 'genres', 'actors', 'awards', 'directors', 'platforms', 'filmGenres', 'filmActors', 'filmAwards', 'filmPlatforms'));
     }
 
     /**
@@ -57,15 +136,14 @@ class FilmController extends Controller
         $filmActors = $film->actors()->get();
         $filmAwards = $film->awards()->get();
         $filmPlatforms = $film->platforms()->get();
-        return view('films.edit', compact('film', 'genres', 'actors', 'awards', 'directors', 'platforms', 'filmGenres', 'filmActors', 'filmAwards', 'filmPlatforms'));
+        return view('admin.films.edit', compact('film', 'genres', 'actors', 'awards', 'directors', 'platforms', 'filmGenres', 'filmActors', 'filmAwards', 'filmPlatforms'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Film $film, User $user)
+    public function update(Request $request, Film $film)
     {
-        $filmUsers = FilmUser::get()->where('film_id', $film->id)->where('user_id', $user->id);
         $film->update($request->all());
 
         // Iterar $request->input('filmGenres')
@@ -178,16 +256,15 @@ class FilmController extends Controller
             }
         }
 
-        return to_route('films.index');
+        return to_route('admin.films.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Film $film, User $user)
+    public function destroy(Film $film)
     {
-        $filmUsers = FilmUser::all();
-        $filmUsers->where('film_id', $film->id)->where('user_id', $user->id)->delete();
-        return to_route('films.show');
+        $film->delete();
+        return to_route('admin.films.index');
     }
 }

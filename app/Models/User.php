@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'password',
         'suscription',
+        'recomendation',
         'admin',
         'avatar_id',
         'suscription_id'
@@ -88,5 +89,9 @@ class User extends Authenticatable
     public function films(): BelongsToMany
     {
         return $this->belongsToMany(film::class);
+    }
+
+    public function genre_ids() {
+        return $this->genres->pluck('id');
     }
 }

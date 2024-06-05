@@ -16,6 +16,7 @@ class Suscription extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'description',
         'price',
         'type',
         'duration'

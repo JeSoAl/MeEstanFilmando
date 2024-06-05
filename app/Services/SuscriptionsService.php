@@ -13,6 +13,10 @@ class SuscriptionsService {
   public function search($request) {
     $suscriptions = Suscription::all();
 
+    if ($request->has('description') && $request->description != '') {
+      $suscriptions->where('description', 'like', '%' . $request->description . '%');
+    }
+
     if ($request->has('price') && $request->price != '') {
       $suscriptions->where('price', $request->price);
     }

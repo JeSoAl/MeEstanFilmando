@@ -22,7 +22,7 @@ class ActorController extends Controller
     public function index(Request $request)
     {
         $actors = $this->actorsService->search($request)->get();
-        return view('actors.index', compact('actors', 'request'));
+        return view('admin.actors.index', compact('actors', 'request'));
     }
 
     /**
@@ -31,7 +31,7 @@ class ActorController extends Controller
     public function create()
     {
         $actor = new Actor();
-        return view('actors.create', compact('actors'));
+        return view('admin.actors.create', compact('actor'));
     }
 
     /**
@@ -42,7 +42,7 @@ class ActorController extends Controller
         $actor = Actor::create($request->all());
         $actor->save();
 
-        return to_route('actors.index');
+        return to_route('admin.actors.index');
     }
 
     /**
@@ -58,7 +58,7 @@ class ActorController extends Controller
      */
     public function edit(Actor $actor)
     {
-        return view('actors.edit', compact('actor'));
+        return view('admin.actors.edit', compact('actor'));
     }
 
     /**
@@ -68,7 +68,7 @@ class ActorController extends Controller
     {
         $actor->update($request->all());
 
-        return to_route('actors.index');
+        return to_route('admin.actors.index');
     }
 
     /**
@@ -77,6 +77,6 @@ class ActorController extends Controller
     public function destroy(Actor $actor)
     {
         $actor->delete();
-        return to_route('actors.index');
+        return to_route('admin.actors.index');
     }
 }

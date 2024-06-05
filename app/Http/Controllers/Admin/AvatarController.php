@@ -22,7 +22,7 @@ class AvatarController extends Controller
     public function index(Request $request)
     {
         $avatars = $this->avatarsService->search($request)->get();
-        return view('avatars.index', compact('avatars', 'request'));
+        return view('admin.avatars.index', compact('avatars', 'request'));
     }
 
     /**
@@ -31,7 +31,7 @@ class AvatarController extends Controller
     public function create()
     {
         $avatar = new Avatar();
-        return view('avatars.create', compact('avatars'));
+        return view('admin.avatars.create', compact('avatar'));
     }
 
     /**
@@ -42,7 +42,7 @@ class AvatarController extends Controller
         $avatar = Avatar::create($request->all());
         $avatar->save();
 
-        return to_route('avatars.index');
+        return to_route('admin.avatars.index');
     }
 
     /**
@@ -58,7 +58,7 @@ class AvatarController extends Controller
      */
     public function edit(Avatar $avatar)
     {
-        return view('avatars.edit', compact('avatar'));
+        return view('admin.avatars.edit', compact('avatar'));
     }
 
     /**
@@ -68,7 +68,7 @@ class AvatarController extends Controller
     {
         $avatar->update($request->all());
 
-        return to_route('avatars.index');
+        return to_route('admin.avatars.index');
     }
 
     /**
@@ -77,6 +77,6 @@ class AvatarController extends Controller
     public function destroy(Avatar $avatar)
     {
         $avatar->delete();
-        return to_route('avatars.index');
+        return to_route('admin.avatars.index');
     }
 }

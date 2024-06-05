@@ -22,7 +22,7 @@ class PlatformController extends Controller
     public function index(Request $request)
     {
         $platforms = $this->platformsService->search($request)->get();
-        return view('platforms.index', compact('platforms', 'request'));
+        return view('admin.platforms.index', compact('platforms', 'request'));
     }
 
     /**
@@ -31,7 +31,7 @@ class PlatformController extends Controller
     public function create()
     {
         $platform = new Platform();
-        return view('platforms.create', compact('platforms'));
+        return view('admin.platforms.create', compact('platform'));
     }
 
     /**
@@ -42,7 +42,7 @@ class PlatformController extends Controller
         $platform = Platform::create($request->all());
         $platform->save();
 
-        return to_route('platforms.index');
+        return to_route('admin.platforms.index');
     }
 
     /**
@@ -58,7 +58,7 @@ class PlatformController extends Controller
      */
     public function edit(Platform $platform)
     {
-        return view('platforms.edit', compact('platform'));
+        return view('admin.platforms.edit', compact('platform'));
     }
 
     /**
@@ -68,7 +68,7 @@ class PlatformController extends Controller
     {
         $platform->update($request->all());
 
-        return to_route('platforms.index');
+        return to_route('admin.platforms.index');
     }
 
     /**
@@ -77,6 +77,6 @@ class PlatformController extends Controller
     public function destroy(Platform $platform)
     {
         $platform->delete();
-        return to_route('platforms.index');
+        return to_route('admin.platforms.index');
     }
 }
