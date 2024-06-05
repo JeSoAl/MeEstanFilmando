@@ -90,8 +90,24 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(film::class);
     }
+    
+    /**
+     * The genres that belong to the user.
+     */
+    public function genres(): BelongsToMany
+    {
+        return $this->belongsToMany(Genre::class);
+    }
 
     public function genre_ids() {
-        return $this->genres->pluck('id');
+        $genres = [];
+        $i = 0;
+        foreach ($this->genres as $genre) {
+            if ($genre->pivot->type == true) {
+                $genres[$i] = $genre->id;
+                $i++;
+            }
+        }
+        return $genres;
     }
 }

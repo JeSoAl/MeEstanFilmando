@@ -101,7 +101,7 @@ class FilmController extends Controller
         }
 
         $userGenres = UserGenre::where('user_id', $user->id)->where('type', 'true');
-        $films = Film::whereIn('genre_id', $user->genre_ids())->where('ty')->inRandomOrder()->limit(15)->get(); 
+        $films = Film::whereIn('genre_id', $user->genre_ids())->inRandomOrder()->limit(15)->get(); 
         $films = Film::all();
         $films->where(function ($q) {
             $i = 0;

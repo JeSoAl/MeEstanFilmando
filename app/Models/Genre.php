@@ -33,4 +33,12 @@ class Genre extends Model
     {
         return $this->belongsToMany(Film::class);
     }
+    
+    /**
+     * The users that belong to the genre.
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class);
+    }
 }
