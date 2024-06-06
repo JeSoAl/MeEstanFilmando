@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Film;
 use App\Models\Actor;
 use App\Models\Director;
@@ -11,6 +12,10 @@ use App\Models\FilmActor;
 use App\Models\FilmGenre;
 use App\Models\FilmAward;
 use App\Models\FilmPlatform;
+use App\Models\FilmUser;
+use App\Models\UserNoFilm;
+use App\Models\UserGenre;
+use App\Models\userPlatform;
 use App\Http\Controllers\Controller;
 use App\Services\FilmsService;
 use Illuminate\Http\Request;
@@ -99,6 +104,31 @@ class FilmController extends Controller
                 $filmPlatform->platform_id = $value['platform_id'];
                 $filmPlatform->film_id = $film->id;
                 $filmPlatform->save();
+            }
+        }
+
+        FilmUser::truncate();
+        $users = User::all();
+        foreach ($users as $user) {
+            $films = Film::whereHas('genres', function($query) use ($user) { $query->whereIn('genre_id', $user->genre_ids()); }); 
+            $userGenres = UserGenre::where('user_id', $user->id)->where('type', 'false');
+            foreach ($userGenres as $userGenre) {
+                $films->whereHas('genres', function($query) use ($user) { $query->where('id', '!=', $userGenre->genre_id); });
+            }
+            $userPlatforms = UserPlatform::where('user_id', $user->id);
+            foreach ($userPlatforms as $userPlatform) {
+                $films->whereHas('platforms', function($query) use ($user) { $query->where('id', $userPlatform->platform_id); });
+            }
+            $userNoFilms = UserNoFilm::where('user_id', $user->id)->where('type', 'false');
+            foreach ($userNoFilms as $userNoFilm) {
+                $films->whereHas('noFilms', function($query) use ($user) { $query->where('id', '!=', $userNoFilm->film_id); });
+            }
+            $films->inRandomOrder()->limit(15)->get(); 
+            foreach ($films as $film) {
+                $filmUser = new FilmUser();
+                $filmUser->user_id = $user->id;
+                $filmUser->film_id = $film->id;
+                $filmUser->save();
             }
         }
 
@@ -253,6 +283,31 @@ class FilmController extends Controller
                     $filmPlatform->film_id = $film->id;
                     $filmPlatform->save();
                 }
+            }
+        }
+
+        FilmUser::truncate();
+        $users = User::all();
+        foreach ($users as $user) {
+            $films = Film::whereHas('genres', function($query) use ($user) { $query->whereIn('genre_id', $user->genre_ids()); }); 
+            $userGenres = UserGenre::where('user_id', $user->id)->where('type', 'false');
+            foreach ($userGenres as $userGenre) {
+                $films->whereHas('genres', function($query) use ($user) { $query->where('id', '!=', $userGenre->genre_id); });
+            }
+            $userPlatforms = UserPlatform::where('user_id', $user->id);
+            foreach ($userPlatforms as $userPlatform) {
+                $films->whereHas('platforms', function($query) use ($user) { $query->where('id', $userPlatform->platform_id); });
+            }
+            $userNoFilms = UserNoFilm::where('user_id', $user->id)->where('type', 'false');
+            foreach ($userNoFilms as $userNoFilm) {
+                $films->whereHas('noFilms', function($query) use ($user) { $query->where('id', '!=', $userNoFilm->film_id); });
+            }
+            $films->inRandomOrder()->limit(15)->get(); 
+            foreach ($films as $film) {
+                $filmUser = new FilmUser();
+                $filmUser->user_id = $user->id;
+                $filmUser->film_id = $film->id;
+                $filmUser->save();
             }
         }
 

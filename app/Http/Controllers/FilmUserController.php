@@ -13,32 +13,10 @@ use App\Models\FilmGenre;
 use App\Models\FilmAward;
 use App\Models\FilmPlatform;
 use App\Http\Controllers\Controller;
-use App\Services\FilmsService;
 use Illuminate\Http\Request;
 
 class FilmController extends Controller
 {
-    private $filmsService;
-
-    public function __construct(FilmsService $filmsService)
-    {
-        $this->filmsService = $filmsService;
-    }
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
-    {
-        $directors = Director::all();
-        $actors = Actor::all();
-        $genres = Genre::all();
-        $awards = Award::all();
-        $platforms = Platform::all();
-        $films = $this->filmsService->search($request)->get();
-        return view('admin.films.index', compact('films', 'genres', 'awards', 'actors', 'directors', 'platforms', 'request'));
-    }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -50,7 +28,7 @@ class FilmController extends Controller
         $genres = Genre::all();
         $awards = Award::all();
         $platforms = Platform::all();
-        $filmUser = new Film();
+        $filmUser = new FilmUser();
         return view('admin.films.create', compact('filmUser', 'films', 'genres', 'actors', 'awards', 'directors', 'platforms'));
     }
 
@@ -60,13 +38,11 @@ class FilmController extends Controller
     public function store(Request $request, User $user)
     {
         $genres = Genre::all();
-        $filters = [];
-        $film = Film::create($request->all());
-        $film->save();
+        $platforms = Platform::all();
 
         // Iterar géneros
         foreach ($genres as $genre) {
-            if (isset($request->input($genre->id .'radio'))) {
+            if ($request->input($genre->id .'radio') !== null) {
                 if ($request->input($genre->id .'radio') == 'yes') {
                     $userGenre = new UserGenre();
                     $userGenre->user_id = $user->id;
@@ -83,14 +59,14 @@ class FilmController extends Controller
                 }
             }
             else {
-                if (isset($request->input($genre->id .'checkboxYes')) && $request->input($genre->id .'checkboxYes') == true) {
+                if ($request->input($genre->id .'checkboxYes') !== null && $request->input($genre->id .'checkboxYes') == true) {
                     $userGenre = new UserGenre();
                     $userGenre->user_id = $user->id;
                     $userGenre->genre_id = $genre->id;
                     $userGenre->type = true;
                     $userGenre->save();
                 }
-                else if (isset($request->input($genre->id .'checkboxNo')) && $request->input($genre->id .'checkboxNo') == true) {
+                else if ($request->input($genre->id .'checkboxNo') !== null && $request->input($genre->id .'checkboxNo') == true) {
                     $userGenre = new UserGenre();
                     $userGenre->user_id = $user->id;
                     $userGenre->genre_id = $genre->id;
@@ -99,22 +75,31 @@ class FilmController extends Controller
                 }
             }
         }
-
-        $userGenres = UserGenre::where('user_id', $user->id)->where('type', 'true');
-        $films = Film::whereIn('genre_id', $user->genre_ids())->inRandomOrder()->limit(15)->get(); 
-        $films = Film::all();
-        $films->where(function ($q) {
-            $i = 0;
-            foreach ($userGenres as $userGenre) {
-                if ($i == 0) {
-                    $q->Where('id', $userGenre->genre_id);
-                }
-                else {
-                    $q->orWhere('id', $userGenre->genre_id);
-                }
-                $i++;
+        
+        // Iterar plataformas
+        foreach ($platforms as $platform) {
+            if ($request->input($platform->id .'checkboxPlatform') !== null && $request->input($platform->id .'checkboxPlatform') == true) {
+                $userPlatform = new UserPlatform();
+                $userPlatform->user_id = $user->id;
+                $userPlatform->platform_id = $platform->id;
+                $userPlatform->save();
             }
-        })->inRandomOrder();
+        }
+
+        $films = Film::whereHas('genres', function($query) use ($user) { $query->whereIn('genre_id', $user->genre_ids()); }); 
+        $userGenres = UserGenre::where('user_id', $user->id)->where('type', 'false');
+        foreach ($userGenres as $userGenre) {
+            $films->whereHas('genres', function($query) use ($user) { $query->where('id', '!=', $userGenre->genre_id); });
+        }
+        $userPlatforms = UserPlatform::where('user_id', $user->id);
+        foreach ($userPlatforms as $userPlatform) {
+            $films->whereHas('platforms', function($query) use ($user) { $query->where('id', $userPlatform->platform_id); });
+        }
+        $userNoFilms = UserNoFilm::where('user_id', $user->id)->where('type', 'false');
+        foreach ($userNoFilms as $userNoFilm) {
+            $films->whereHas('noFilms', function($query) use ($user) { $query->where('id', '!=', $userNoFilm->film_id); });
+        }
+        $films->inRandomOrder()->limit(15)->get(); 
         foreach ($films as $film) {
             $filmUser = new FilmUser();
             $filmUser->user_id = $user->id;
@@ -128,8 +113,9 @@ class FilmController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Film $film)
+    public function show(FilmUser $filmUser)
     {
+        $film = Film::where('id', $filmUser->film_id);
         $directors = Director::all();
         $actors = Actor::all();
         $genres = Genre::all();
@@ -139,7 +125,7 @@ class FilmController extends Controller
         $filmActors = $film->actors()->get();
         $filmAwards = $film->awards()->get();
         $filmPlatforms = $film->platforms()->get();
-        return view('admin.films.show', compact('film', 'genres', 'actors', 'awards', 'directors', 'platforms', 'filmGenres', 'filmActors', 'filmAwards', 'filmPlatforms'));
+        return view('filmsUsers.show', compact('filmUser', 'film', 'genres', 'actors', 'awards', 'directors', 'platforms', 'filmGenres', 'filmActors', 'filmAwards', 'filmPlatforms'));
     }
 
     /**
@@ -162,118 +148,97 @@ class FilmController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Film $film)
+    public function update(Request $request, FilmUser $filmUser, User $user)
     {
-        $film->update($request->all());
+        $userGenres = UserGenre::all();
+        $userPlatforms = UserPlatform::all();
+        $filmUsers = FilmUser::all();
+        $genres = Genre::all();
+        $platforms = Platform::all();
 
-        // Iterar $request->input('filmGenres')
-        if ($request->input('filmGenres')) {
-            $filmGenres = $film->genres()->get();
-            foreach ($filmGenres as $filmGenre) {
-                $count = 0;
-                foreach ($request->input('filmGenres') as $key => $value) {
-                    if (isset($value['id']) && $filmGenre->id == $value['id']) {
-                        $filmGenre->genre_id = $value['genre_id'];
-                        $filmGenre->film_id = $film->id;
-                        $filmGenre->update();
-                        $count++;
-                    }
-                }
-                if ($count == 0) {
-                    $filmGenre->delete();
-                }
-            }
-            foreach ($request->input('filmGenres') as $key => $value) {
-                if (!isset($value['id'])) {
-                    $filmGenre = new filmGenre();
-                    $filmGenre->genre_id = $value['genre_id'];
-                    $filmGenre->film_id = $film->id;
-                    $filmGenre->save();
-                }
+        foreach ($userGenres as $userGenre) {
+            if ($userGenre->user_id == $user->id) {
+                $userGenre->delete();
             }
         }
 
-        // Iterar $request->input('filmActors')
-        if ($request->input('filmActors')) {
-            $filmActors = $film->actors()->get();
-            foreach ($filmActors as $filmActor) {
-                $count = 0;
-                foreach ($request->input('filmActors') as $key => $value) {
-                    if (isset($value['id']) && $filmActor->id == $value['id']) {
-                        $filmActor->actor_id = $value['actor_id'];
-                        $filmActor->film_id = $film->id;
-                        $filmActor->update();
-                        $count++;
-                    }
-                }
-                if ($count == 0) {
-                    $filmActor->delete();
-                }
-            }
-            foreach ($request->input('filmActors') as $key => $value) {
-                if (!isset($value['id'])) {
-                    $filmActor = new filmActor();
-                    $filmActor->actor_id = $value['actor_id'];
-                    $filmActor->film_id = $film->id;
-                    $filmActor->save();
-                }
+        foreach ($userPlatforms as $userPlatform) {
+            if ($userPlatform->user_id == $user->id) {
+                $userPlatform->delete();
             }
         }
 
-        // Iterar $request->input('filmAwards')
-        if ($request->input('filmAwards')) {
-            $filmAwards = $film->awards()->get();
-            foreach ($filmAwards as $filmAward) {
-                $count = 0;
-                foreach ($request->input('filmAwards') as $key => $value) {
-                    if (isset($value['id']) && $filmAward->id == $value['id']) {
-                        $filmAward->number = $value['number'];
-                        $filmAward->award_id = $value['award_id'];
-                        $filmAward->film_id = $film->id;
-                        $filmAward->update();
-                        $count++;
-                    }
-                }
-                if ($count == 0) {
-                    $filmAward->delete();
-                }
-            }
-            foreach ($request->input('filmAwards') as $key => $value) {
-                if (!isset($value['id'])) {
-                    $filmAward = new filmAward();
-                    $filmAward->number = $value['number'];
-                    $filmAward->award_id = $value['award_id'];
-                    $filmAward->film_id = $film->id;
-                    $filmAward->save();
-                }
+        foreach ($filmUsers as $filmUser) {
+            if ($filmUser->user_id == $user->id) {
+                $filmUser->delete();
             }
         }
 
-        // Iterar $request->input('filmPlatforms')
-        if ($request->input('filmPlatforms')) {
-            $filmPlatforms = $film->platforms()->get();
-            foreach ($filmPlatforms as $filmPlatform) {
-                $count = 0;
-                foreach ($request->input('filmPlatforms') as $key => $value) {
-                    if (isset($value['id']) && $filmPlatform->id == $value['id']) {
-                        $filmPlatform->platform_id = $value['platform_id'];
-                        $filmPlatform->film_id = $film->id;
-                        $filmPlatform->update();
-                        $count++;
-                    }
+        // Iterar géneros
+        foreach ($genres as $genre) {
+            if ($request->input($genre->id .'radio') !== null) {
+                if ($request->input($genre->id .'radio') == 'yes') {
+                    $userGenre = new UserGenre();
+                    $userGenre->user_id = $user->id;
+                    $userGenre->genre_id = $genre->id;
+                    $userGenre->type = true;
+                    $userGenre->save();
                 }
-                if ($count == 0) {
-                    $filmPlatform->delete();
-                }
-            }
-            foreach ($request->input('filmPlatforms') as $key => $value) {
-                if (!isset($value['id'])) {
-                    $filmPlatform = new filmPlatform();
-                    $filmPlatform->platform_id = $value['platform_id'];
-                    $filmPlatform->film_id = $film->id;
-                    $filmPlatform->save();
+                else if ($request->input($genre->id .'radio') == 'no') {
+                    $userGenre = new UserGenre();
+                    $userGenre->user_id = $user->id;
+                    $userGenre->genre_id = $genre->id;
+                    $usergenre->type = false;
+                    $userGenre->save();
                 }
             }
+            else {
+                if ($request->input($genre->id .'checkboxYes') !== null && $request->input($genre->id .'checkboxYes') == true) {
+                    $userGenre = new UserGenre();
+                    $userGenre->user_id = $user->id;
+                    $userGenre->genre_id = $genre->id;
+                    $userGenre->type = true;
+                    $userGenre->save();
+                }
+                else if ($request->input($genre->id .'checkboxNo') !== null && $request->input($genre->id .'checkboxNo') == true) {
+                    $userGenre = new UserGenre();
+                    $userGenre->user_id = $user->id;
+                    $userGenre->genre_id = $genre->id;
+                    $usergenre->type = false;
+                    $userGenre->save();
+                }
+            }
+        }
+        
+        // Iterar plataformas
+        foreach ($platforms as $platform) {
+            if ($request->input($platform->id .'checkboxPlatform') !== null && $request->input($platform->id .'checkboxPlatform') == true) {
+                $userPlatform = new UserPlatform();
+                $userPlatform->user_id = $user->id;
+                $userPlatform->platform_id = $platform->id;
+                $userPlatform->save();
+            }
+        }
+
+        $films = Film::whereHas('genres', function($query) use ($user) { $query->whereIn('genre_id', $user->genre_ids()); }); 
+        $userGenres = UserGenre::where('user_id', $user->id)->where('type', 'false');
+        foreach ($userGenres as $userGenre) {
+            $films->whereHas('genres', function($query) use ($user) { $query->where('id', '!=', $userGenre->genre_id); });
+        }
+        $userPlatforms = UserPlatform::where('user_id', $user->id);
+        foreach ($userPlatforms as $userPlatform) {
+            $films->whereHas('platforms', function($query) use ($user) { $query->where('id', $userPlatform->platform_id); });
+        }
+        $userNoFilms = UserNoFilm::where('user_id', $user->id)->where('type', 'false');
+        foreach ($userNoFilms as $userNoFilm) {
+            $films->whereHas('noFilms', function($query) use ($user) { $query->where('id', '!=', $userNoFilm->film_id); });
+        }
+        $films->inRandomOrder()->limit(15)->get(); 
+        foreach ($films as $film) {
+            $filmUser = new FilmUser();
+            $filmUser->user_id = $user->id;
+            $filmUser->film_id = $film->id;
+            $filmUser->save();
         }
 
         return to_route('admin.films.index');
@@ -282,9 +247,13 @@ class FilmController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Film $film)
+    public function destroy(FilmUser $filmUser)
     {
-        $film->delete();
+        $userNoFilm = new UserNoFilm();
+        $userNoFilm->user_id = $filmUser->user_id;
+        $userNoFilm->film_id = $filmUser->film_id;
+        $userNoFilm->save();
+        $filmUser->delete();
         return to_route('admin.films.index');
     }
 }

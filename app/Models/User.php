@@ -88,7 +88,15 @@ class User extends Authenticatable
      */
     public function films(): BelongsToMany
     {
-        return $this->belongsToMany(film::class);
+        return $this->belongsToMany(Film::class);
+    }
+    
+    /**
+     * The platforms that belong to the user.
+     */
+    public function platforms(): BelongsToMany
+    {
+        return $this->belongsToMany(Platform::class);
     }
     
     /**
@@ -104,6 +112,18 @@ class User extends Authenticatable
         $i = 0;
         foreach ($this->genres as $genre) {
             if ($genre->pivot->type == true) {
+                $genres[$i] = $genre->id;
+                $i++;
+            }
+        }
+        return $genres;
+    }
+
+    public function noGenre_ids() {
+        $genres = [];
+        $i = 0;
+        foreach ($this->genres as $genre) {
+            if ($genre->pivot->type == false) {
                 $genres[$i] = $genre->id;
                 $i++;
             }
