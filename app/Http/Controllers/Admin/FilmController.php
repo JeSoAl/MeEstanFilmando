@@ -15,7 +15,7 @@ use App\Models\FilmPlatform;
 use App\Models\FilmUser;
 use App\Models\UserNoFilm;
 use App\Models\UserGenre;
-use App\Models\userPlatform;
+use App\Models\UserPlatform;
 use App\Http\Controllers\Controller;
 use App\Services\FilmsService;
 use Illuminate\Http\Request;

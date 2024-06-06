@@ -82,4 +82,12 @@ class Film extends Model
     {
         return $this->belongsToMany(Platform::class);
     }
+    
+    /**
+     * The users that don´t belong to the film.
+     */
+    public function noUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class);
+    }
 }

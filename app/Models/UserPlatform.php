@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserGenre extends Model
+class UserPlatform extends Model
 {
     use HasFactory;
 
@@ -15,9 +15,8 @@ class UserGenre extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'type',
         'user_id',
-        'genre_id'
+        'platform_id'
     ];
 
     /**

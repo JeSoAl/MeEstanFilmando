@@ -76,17 +76,17 @@ class User extends Authenticatable
     }
     
     /**
-     * The cards that belong to the user.
-     */
-    public function cards(): BelongsToMany
-    {
-        return $this->belongsToMany(Card::class);
-    }
-    
-    /**
      * The films that belong to the user.
      */
     public function films(): BelongsToMany
+    {
+        return $this->belongsToMany(Film::class);
+    }
+    
+    /**
+     * The films that don´t belong to the user.
+     */
+    public function noFilms(): BelongsToMany
     {
         return $this->belongsToMany(Film::class);
     }

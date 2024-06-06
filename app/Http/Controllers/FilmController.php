@@ -27,6 +27,15 @@ class FilmController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        $films = $this->filmsService->search($request)->get();
+        return view('admin.films.index', compact('films', 'request'));
+    }
+
+    /**
      * Display the specified resource.
      */
     public function show(Film $film, User $user)

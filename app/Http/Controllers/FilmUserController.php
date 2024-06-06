@@ -12,6 +12,9 @@ use App\Models\FilmActor;
 use App\Models\FilmGenre;
 use App\Models\FilmAward;
 use App\Models\FilmPlatform;
+use App\Models\UserNoFilm;
+use App\Models\UserGenre;
+use App\Models\UserPlatform;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 

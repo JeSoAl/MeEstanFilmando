@@ -18,6 +18,7 @@ class Comment extends Model
      */
     protected $fillable = [
         'content',
+        'user_id',
         'film_id',
         'comment_id'
     ];
@@ -30,11 +31,19 @@ class Comment extends Model
     ];
 
     /**
-     * Get the comments for the comment.
+     * Get the user that owns the comment.
      */
-    public function comments(): HasMany
+    public function user(): BelongsTo
     {
-        return $this->hasMany(Comment::class);
+        return $this->belongsTo(user::class);
+    }
+
+    /**
+     * Get the film that owns the comment.
+     */
+    public function film(): BelongsTo
+    {
+        return $this->belongsTo(Film::class);
     }
 
     /**

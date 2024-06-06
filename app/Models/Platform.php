@@ -31,6 +31,14 @@ class Platform extends Model
      */
     public function films(): BelongsToMany
     {
-        return $this->belongsToMany(film::class);
+        return $this->belongsToMany(Film::class);
+    }
+    
+    /**
+     * The users that belong to the award.
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class);
     }
 }
