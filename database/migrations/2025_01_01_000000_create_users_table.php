@@ -13,18 +13,19 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('avatar_id');
-            $table->unsignedBigInteger('suscription_id');
+            $table->unsignedBigInteger('avatar_id')->nullable();
+            $table->unsignedBigInteger('suscription_id')->nullable();
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('suscription')->default(false);
             $table->boolean('recomendation')->default(false);
+            $table->boolean('order')->default(false);
             $table->boolean('admin')->default(false);
             $table->rememberToken();
-            $table->foreign('avatar_id')->references('id')->on('avatars')->onDelete('cascade')->nullable();
-            $table->foreign('suscription_id')->references('id')->on('suscriptions')->onDelete('cascade')->nullable();
+            $table->foreign('avatar_id')->references('id')->on('avatars')->onDelete('cascade');
+            $table->foreign('suscription_id')->references('id')->on('suscriptions')->onDelete('cascade');
             $table->timestamps();
         });
 

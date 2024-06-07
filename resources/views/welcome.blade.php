@@ -16,7 +16,7 @@
     </head>
     <body class="bg-dark">
         <nav class="navbar navbar-expand-sm navbar-black bg-black fixed-top">
-            <a class="navbar-brand" href="welcome.blade.php"><img src="../../public/pictures/MeEstanFilmando.png"></a>
+            <a class="navbar-brand" href="welcome.blade.php"><img src="/pictures/MeEstanFilmando.png" width="200"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
                 <span class="navbar-toggler-icon"></span>
             </button>

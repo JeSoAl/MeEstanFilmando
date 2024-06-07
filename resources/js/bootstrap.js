@@ -4,8 +4,6 @@ window.axios = axios;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 // Instrucciones a ejecutar
-npm install jquery --save 
-npm install bootstrap --save
 
 import jQuery from 'jquery';
 window.jQuery = window.$ = jQuery;

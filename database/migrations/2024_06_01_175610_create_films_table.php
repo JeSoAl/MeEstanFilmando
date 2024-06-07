@@ -13,15 +13,14 @@ return new class extends Migration
     {
         Schema::create('films', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('director_id');
+            $table->unsignedBigInteger('director_id')->nullable();
             $table->string('title');
             $table->string('original');
             $table->string('description');
             $table->integer('duration');
             $table->year('year');
-            $table->integer('position');
             $table->string('picture')->nullable();
-            $table->foreign('director_id')->references('id')->on('directors')->onDelete('cascade')->nullable();
+            $table->foreign('director_id')->references('id')->on('directors')->onDelete('cascade');
             $table->timestamps();
         });
     }

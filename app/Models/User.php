@@ -76,17 +76,17 @@ class User extends Authenticatable
     }
     
     /**
-     * The films that belong to the user.
+     * The cards that belong to the user.
      */
-    public function films(): BelongsToMany
+    public function cards(): BelongsToMany
     {
-        return $this->belongsToMany(Film::class);
+        return $this->belongsToMany(Card::class);
     }
     
     /**
-     * The films that don´t belong to the user.
+     * The films that belong to the user.
      */
-    public function noFilms(): BelongsToMany
+    public function films(): BelongsToMany
     {
         return $this->belongsToMany(Film::class);
     }
@@ -119,7 +119,7 @@ class User extends Authenticatable
         return $genres;
     }
 
-    public function noGenre_ids() {
+    public function noFilm_ids() {
         $genres = [];
         $i = 0;
         foreach ($this->genres as $genre) {
