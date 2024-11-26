@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Ffilmies\HasFfilmy;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Award extends Model
 {
-    use HasFfilmy;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -17,6 +17,7 @@ class Award extends Model
      */
     protected $fillable = [
         'type',
+        'plural'
     ];
 
     /**

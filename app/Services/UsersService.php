@@ -41,7 +41,7 @@ class UsersService {
       $users->where('suscription_id', $request->suscription_id);
     }
 
-    $users->orderByRaw($request->sort_by ?? 'users.id desc');
+    $users->orderByRaw($request->sort_by ?? 'users.id asc');
 
     return $users;
   }

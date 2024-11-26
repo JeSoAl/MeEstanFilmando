@@ -11,7 +11,7 @@ class DirectorsService {
     * @param Request $request
     **/ 
   public function search($request) {
-    $directors = Director::all();
+    $directors = Director::query();
 
     if ($request->has('name') && $request->name != '') {
       $directors->where('name', 'like', '%' . $request->name . '%');
@@ -21,7 +21,7 @@ class DirectorsService {
       $directors->where('country', 'like', '%' . $request->country . '%');
     }
 
-    $directors->orderByRaw($request->sort_by ?? 'directors.id desc');
+    $directors->orderByRaw($request->sort_by ?? 'directors.id asc');
 
     return $directors;
   }

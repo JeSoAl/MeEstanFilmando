@@ -11,13 +11,13 @@ class AwardsService {
     * @param Request $request
     **/ 
   public function search($request) {
-    $awards = Award::all();
+    $awards = Award::query();
 
     if ($request->has('type') && $request->type != '') {
       $awards->where('type', 'like', '%' . $request->type . '%');
     }
 
-    $awards->orderByRaw($request->sort_by ?? 'awards.id desc');
+    $awards->orderByRaw($request->sort_by ?? 'awards.id asc');
 
     return $awards;
   }

@@ -1,11 +1,17 @@
 <?php
 
+namespace App\Http\Controllers\Auth;
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Services\UsersService;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
 
 class UserController extends Controller
 {
@@ -37,15 +43,23 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, User $user)
     {
-        if ($request->has('password_confirmation') && $request->input('password') == $request->input('password_confirmation')) {
-            User::create();
-            return to_route('admin.users.index');
-        }
-        else {
-            return view('admin.users.create', compact('user', 'request'));
-        }
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        event(new Registered($user));
+
+        return to_route('admin.users.index');
     }
 
     /**
@@ -70,7 +84,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $user->update();
+        $user->update($request->all());
 
         return to_route('admin.users.index');
     }

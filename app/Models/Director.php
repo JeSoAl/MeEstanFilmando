@@ -45,4 +45,16 @@ class Director extends Model
     {
         return $this->belongsToMany(Award::class);
     }
+
+    public function award_ids() {
+        $awards = [];
+        $i = 0;
+        foreach ($this->awards as $award) {
+            if ($award->pivot->type == true) {
+                $awards[$i] = $award->id;
+                $i++;
+            }
+        }
+        return $awards;
+    }
 }

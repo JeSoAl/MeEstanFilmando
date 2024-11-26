@@ -2,25 +2,39 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <link rel="icon" type="image/png" href="/pictures/MeEstanFilmando3.png"/>
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>Me Están Filmando</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
+        <!-- Styles -->
+        <link rel="stylesheet" href="/css/bootstrap.min.css" />
+        <link href="{{ URL::asset('/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ URL::asset('/assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
+        <div class="min-h-screen bg-gray-800">
+            <!-- Page Navigation bar -->
             @include('layouts.navigation')
+
+            <!-- Admin Navigation bar -->
+            @auth
+                @if(Auth::user()->admin === 1)
+                    @include('layouts.admin-nav')
+                @endif
+            @endauth
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="bg-white shadow">
+                <header class="bg-gray-900 shadow">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
@@ -31,6 +45,9 @@
             <main>
                 {{ $slot }}
             </main>
+
+            <!-- Page Footer -->
+            @include('layouts.footer')
         </div>
     </body>
 </html>

@@ -21,7 +21,7 @@ class AwardController extends Controller
      */
     public function index(Request $request)
     {
-        $awards = $this->awardsService->search($request)->get();
+        $awards = $this->awardsService->search($request)->paginate($request->get('per_page', 10));
         return view('admin.awards.index', compact('awards', 'request'));
     }
 
