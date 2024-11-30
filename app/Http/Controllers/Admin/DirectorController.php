@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Director;
-use App\Models\DirectorAward;
-use App\Models\Award;
 use App\Http\Controllers\Controller;
 use App\Services\DirectorsService;
 use Illuminate\Http\Request;
@@ -24,8 +22,7 @@ class DirectorController extends Controller
     public function index(Request $request)
     {
         $directors = $this->directorsService->search($request)->paginate($request->get('per_page', 10));
-        $awards = Film::awards();
-        return view('admin.directors.index', compact('directors', 'awards', 'request'));
+        return view('admin.directors.index', compact('directors', 'request'));
     }
 
     /**

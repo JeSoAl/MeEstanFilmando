@@ -21,7 +21,7 @@ class ActorController extends Controller
      */
     public function index(Request $request)
     {
-        $actors = $this->actorsService->search($request)->get();
+        $actors = $this->actorsService->search($request)->paginate($request->get('per_page', 10));
         return view('admin.actors.index', compact('actors', 'request'));
     }
 

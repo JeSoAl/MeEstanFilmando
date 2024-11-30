@@ -10,14 +10,21 @@ class FilmUser extends Model
     use HasFactory;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'film_users';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'order',
         'user_id',
-        'film_id'
+        'film_id',
+        'status'
     ];
 
     /**
@@ -26,4 +33,23 @@ class FilmUser extends Model
     protected $casts = [
         'created_at' => 'date'
     ];
+
+    /* Different statuses for a courses */
+    const STATUS_DONTSHOW = 'dontshow';
+    const STATUS_PINNED = 'pinned';
+    const STATUSES = [
+        self::STATUS_DONTSHOW,
+        self::STATUS_PINNED
+    ];
+
+    /**
+    * Return all statuses with their labels
+    * @return array
+    */
+    public static function allStatusesWithLabels() {
+        return [
+            self::STATUS_DONTSHOW => 'no mostrar',
+            self::STATUS_PINNED => 'fijado'
+        ];
+    }
 }

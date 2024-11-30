@@ -21,7 +21,7 @@ class PlatformController extends Controller
      */
     public function index(Request $request)
     {
-        $platforms = $this->platformsService->search($request)->get();
+        $platforms = $this->platformsService->search($request)->paginate($request->get('per_page', 10));
         return view('admin.platforms.index', compact('platforms', 'request'));
     }
 

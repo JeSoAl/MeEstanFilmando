@@ -21,7 +21,7 @@ class GenreController extends Controller
      */
     public function index(Request $request)
     {
-        $genres = $this->genresService->search($request)->get();
+        $genres = $this->genresService->search($request)->paginate($request->get('per_page', 10));
         return view('admin.genres.index', compact('genres', 'request'));
     }
 

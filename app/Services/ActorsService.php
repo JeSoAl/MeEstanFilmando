@@ -11,7 +11,7 @@ class ActorsService {
     * @param Request $request
     **/ 
   public function search($request) {
-    $actors = Actor::all();
+    $actors = Actor::query();
 
     if ($request->has('name') && $request->name != '') {
       $actors->where('name', 'like', '%' . $request->name . '%');
@@ -21,7 +21,7 @@ class ActorsService {
       $actors->where('country', 'like', '%' . $request->country . '%');
     }
 
-    $actors->orderByRaw($request->sort_by ?? 'actors.id desc');
+    $actors->orderByRaw($request->sort_by ?? 'actors.id asc');
 
     return $actors;
   }

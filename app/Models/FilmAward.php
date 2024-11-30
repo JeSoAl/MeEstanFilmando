@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class FilmAward extends Model
 {
     use HasFactory;
+    
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'film_awards';
 
     /**
      * The attributes that are mass assignable.

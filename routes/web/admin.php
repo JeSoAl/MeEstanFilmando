@@ -58,7 +58,7 @@ Route::post('/platforms/store', [PlatformController::class, 'store'])->name('adm
 Route::get('/platforms/{platform}/edit', [PlatformController::class, 'edit'])->name('admin.platforms.edit');
 Route::put('/platforms/{platform}/update', [PlatformController::class, 'update'])->name('admin.platforms.update');
 Route::get('/platforms/{platform}/show', [PlatformController::class, 'show'])->name('admin.platforms.show');
-Route::post('/platforms/{platform}/destroy', [PlatformController::class, 'destroy'])->name('vplatforms.destroy');
+Route::post('/platforms/{platform}/destroy', [PlatformController::class, 'destroy'])->name('admin.platforms.destroy');
 
 Route::get('/awards', [AwardController::class, 'index'])->name('admin.awards.index');
 Route::get('/awards/create', [AwardController::class, 'create'])->name('admin.awards.create');

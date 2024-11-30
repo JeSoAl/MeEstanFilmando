@@ -86,7 +86,7 @@ class Film extends Model
     /**
      * The users that don´t belong to the film.
      */
-    public function noUsers(): BelongsToMany
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class);
     }

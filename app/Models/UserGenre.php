@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class UserGenre extends Model
 {
     use HasFactory;
+    
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'user_genres';
 
     /**
      * The attributes that are mass assignable.

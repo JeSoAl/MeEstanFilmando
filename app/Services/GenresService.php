@@ -11,13 +11,13 @@ class GenresService {
     * @param Request $request
     **/ 
   public function search($request) {
-    $genres = Genre::all();
+    $genres = Genre::query();
 
     if ($request->has('name') && $request->name != '') {
       $genres->where('name', 'like', '%' . $request->name . '%');
     }
 
-    $genres->orderByRaw($request->sort_by ?? 'genres.id desc');
+    $genres->orderByRaw($request->sort_by ?? 'genres.id asc');
 
     return $genres;
   }

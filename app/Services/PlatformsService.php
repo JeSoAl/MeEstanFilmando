@@ -11,13 +11,13 @@ class PlatformsService {
     * @param Request $request
     **/ 
   public function search($request) {
-    $platforms = Platform::all();
+    $platforms = Platform::query();
 
     if ($request->has('name') && $request->name != '') {
       $platforms->where('name', 'like', '%' . $request->name . '%');
     }
 
-    $platforms->orderByRaw($request->sort_by ?? 'platforms.id desc');
+    $platforms->orderByRaw($request->sort_by ?? 'platforms.id asc');
 
     return $platforms;
   }

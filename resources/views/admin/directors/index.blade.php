@@ -25,8 +25,7 @@
                           <th>ID</th>
                           <th>Nombre</th>
                           <th>País</th>
-                          <th>Año de nacimiento</th>
-                          <th>Galardones</th>
+                          <th>Fecha de nacimiento</th>
                           <th>Acciones</th>
                         </tr>
                       </thead>
@@ -37,8 +36,7 @@
                           <td>{{ $director->id ? $director->id : '' }}</td>
                           <td>{{ $director->name ? $director->name : '' }}</td>
                           <td>{{ $director->country ? $director->country : '' }}</td>
-                          <td>{{ $director->birthdate ? $director->birthdate : '' }}</td>
-                          <td>{{ $director->admin ? 'Sí' : 'No' }}</td>
+                          <td>{{ $director->birthdate ? date('d/m/Y', strtotime($director->birthdate)) : '' }}</td>
                           <td class="d-flex">
                             <a href="{{ route('admin.directors.edit', $director) }}" class="btn btn-primary btn-sm me-1">
                               <img src="/pictures/icons/edit.png" width="15">
