@@ -38,10 +38,9 @@ class FilmController extends Controller
         $directors = Director::all();
         $actors = Actor::all();
         $genres = Genre::all();
-        $awards = Award::all();
         $platforms = Platform::all();
         $films = $this->filmsService->search($request)->paginate($request->get('per_page', 10));
-        return view('admin.films.index', compact('films', 'genres', 'awards', 'actors', 'directors', 'platforms', 'request'));
+        return view('admin.films.index', compact('films', 'genres', 'actors', 'directors', 'platforms', 'request'));
     }
 
     /**
@@ -63,7 +62,7 @@ class FilmController extends Controller
      */
     public function store(Request $request)
     {
-        // Guardar películas
+        // Guardar película
         $directors = Director::all();
         $director_id = -1;
         foreach ($directors as $director) {
@@ -186,10 +185,10 @@ class FilmController extends Controller
         $genres = Genre::all();
         $awards = Award::all();
         $platforms = Platform::all();
-        $filmGenres = $film->genres()->get();
-        $filmActors = $film->actors()->get();
-        $filmAwards = $film->awards()->get();
-        $filmPlatforms = $film->platforms()->get();
+        $filmGenres = FilmGenre::where('film_id', $film->id)->get();
+        $filmActors = FilmActor::where('film_id', $film->id)->get();
+        $filmAwards = FilmAward::where('film_id', $film->id)->get();
+        $filmPlatforms = FilmPlatform::where('film_id', $film->id)->get();
         return view('admin.films.edit', compact('film', 'genres', 'actors', 'awards', 'directors', 'platforms', 'filmGenres', 'filmActors', 'filmAwards', 'filmPlatforms'));
     }
 
@@ -198,11 +197,26 @@ class FilmController extends Controller
      */
     public function update(Request $request, Film $film)
     {
-        $film->update($request->all());
+        // Actualizar película
+        $directors = Director::all();
+        $director_id = -1;
+        foreach ($directors as $director) {
+            if ($director->name == $request->director_id) {
+                $director_id = $director->id;
+            }
+        }
+        $film->title = $request->title;
+        $film->original = $request->original;
+        $film->duration = $request->duration;
+        $film->year = $request->year;
+        if ($director_id >= 0) {
+            $film->director_id = $director_id;
+        }
+        $film->save();
 
         // Iterar $request->input('genres')
         if ($request->input('genres')) {
-            $filmGenres = $film->genres()->get();
+            $filmGenres = FilmGenre::where('film_id', $film->id)->get();
             foreach ($filmGenres as $filmGenre) {
                 $count = 0;
                 foreach ($request->input('genres') as $key => $value) {
@@ -229,7 +243,7 @@ class FilmController extends Controller
 
         // Iterar $request->input('actors')
         if ($request->input('actors')) {
-            $filmActors = $film->actors()->get();
+            $filmActors = FilmActor::where('film_id', $film->id)->get();
             $actors = Actor::all();
             foreach ($filmActors as $filmActor) {
                 $count = 0;
@@ -273,7 +287,7 @@ class FilmController extends Controller
 
         // Iterar $request->input('platforms')
         if ($request->input('platforms')) {
-            $filmPlatforms = $film->platforms()->get();
+            $filmPlatforms = FilmPlatform::where('film_id', $film->id)->get();
             foreach ($filmPlatforms as $filmPlatform) {
                 $count = 0;
                 foreach ($request->input('platforms') as $key => $value) {
@@ -327,7 +341,7 @@ class FilmController extends Controller
             }
         }
 
-        // FilmUser::truncate();
+        /* FilmUser::truncate();
         $users = User::all();
         foreach ($users as $user) {
             $films = Film::whereHas('genres', function($query) use ($user) { $query->whereIn('genre_id', $user->genre_ids()); }); 
@@ -350,7 +364,7 @@ class FilmController extends Controller
                 $filmUser->film_id = $film->id;
                 $filmUser->save();
             }
-        }
+        } */
 
         return to_route('admin.films.index');
     }

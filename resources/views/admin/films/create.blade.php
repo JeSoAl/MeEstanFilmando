@@ -14,7 +14,11 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-white">
-                  <x-header-title title="Nuevo film" subtitle=""></x-header-title>
+                  <x-header-title title="Nuevo filme" subtitle=""></x-header-title>
+
+                  <?php
+                    $view = "create";
+                  ?>
 
                   <form action="{{ route('admin.films.store') }}" method="POST">
                     @csrf

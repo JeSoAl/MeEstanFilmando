@@ -106,6 +106,22 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Genre::class);
     }
+    
+    /**
+     * The directors that belong to the user.
+     */
+    public function directors(): BelongsToMany
+    {
+        return $this->belongsToMany(Director::class);
+    }
+    
+    /**
+     * The actors that belong to the user.
+     */
+    public function actors(): BelongsToMany
+    {
+        return $this->belongsToMany(Actor::class);
+    }
 
     public function genre_ids() {
         $genres = [];
@@ -119,15 +135,27 @@ class User extends Authenticatable
         return $genres;
     }
 
-    public function noFilm_ids() {
-        $genres = [];
+    public function director_ids() {
+        $directors = [];
         $i = 0;
-        foreach ($this->genres as $genre) {
-            if ($genre->pivot->type == false) {
-                $genres[$i] = $genre->id;
+        foreach ($this->directors as $director) {
+            if ($director->pivot->type == true) {
+                $directors[$i] = $director->id;
                 $i++;
             }
         }
-        return $genres;
+        return $directors;
+    }
+
+    public function actor_ids() {
+        $actors = [];
+        $i = 0;
+        foreach ($this->actors as $actor) {
+            if ($actor->pivot->type == true) {
+                $actors[$i] = $actor->id;
+                $i++;
+            }
+        }
+        return $actors;
     }
 }

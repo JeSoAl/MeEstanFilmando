@@ -14,7 +14,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-white">
-                  <x-header-title  :title="'Modificar los datos del galardón ' . $genre->id" subtitle="" :links="[]">
+                  <x-header-title  :title="'Modificar los datos del género ' . $genre->id" subtitle="" :links="[]">
                   </x-header-title>
 
                   <form action="{{ route('admin.genres.update', $genre) }}" method="POST">

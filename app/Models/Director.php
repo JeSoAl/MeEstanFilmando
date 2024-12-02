@@ -45,6 +45,14 @@ class Director extends Model
     {
         return $this->belongsToMany(Award::class);
     }
+    
+    /**
+     * The users that belong to the director.
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class);
+    }
 
     public function award_ids() {
         $awards = [];

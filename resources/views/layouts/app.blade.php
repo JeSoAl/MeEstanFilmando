@@ -16,12 +16,27 @@
         <link rel="stylesheet" href="/css/bootstrap.min.css" />
         <link href="{{ URL::asset('/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ URL::asset('/assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
+        <style>
+            .body {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .body > * {
+                flex-shrink: 0;
+            }
+            
+            .footer {
+                flex-grow: 1;
+            }   
+        </style>
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-800">
+        <div class="min-h-screen bg-gray-800 body">
             <!-- Page Navigation bar -->
             @include('layouts.navigation')
 

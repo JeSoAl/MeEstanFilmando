@@ -14,7 +14,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-white">
-                  <x-header-title title="Nuevo galardón" subtitle=""></x-header-title>
+                  <x-header-title title="Nuevo género" subtitle=""></x-header-title>
 
                   <form action="{{ route('admin.genres.store') }}" method="POST">
                     @csrf

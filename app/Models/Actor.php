@@ -44,4 +44,12 @@ class Actor extends Model
     {
         return $this->belongsToMany(Award::class);
     }
+    
+    /**
+     * The users that belong to the actor.
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class);
+    }
 }

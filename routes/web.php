@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\FilmController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\FilmUserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,11 +24,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/admin/users', [UserController::class, 'index'])->name('users.index');
-Route::get('/admin/users/create', [UserController::class, 'create'])->name('users.create');
-Route::post('/admin/users/store', [UserController::class, 'store'])->name('users.store');
-Route::get('/admin/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
-Route::put('/admin/users/{user}/update', [UserController::class, 'update'])->name('users.update');
-Route::get('/admin/users/{user}/show', [UserController::class, 'show'])->name('users.show');
-Route::post('/admin/users/{user}/destroy', [UserController::class, 'destroy'])->name('users.destroy');
+Route::get('/filmUsers/create', [FilmUserController::class, 'create'])->name('filmUsers.create');
+Route::post('/filmUsers/{user}/storeFilters', [FilmUserController::class, 'storeFilters'])->name('filmUsers.storeFilters');
+Route::put('/filmUsers/{user}/update', [FilmUserController::class, 'update'])->name('filmUsers.update');
+Route::get('/filmUsers/{user}/show', [FilmUserController::class, 'show'])->name('filmUsers.show');
+Route::post('/filmUsers/{user}/destroy', [FilmUserController::class, 'destroy'])->name('filmUsers.destroy');
+Route::post('/filmUsers/{user}/destroyAll', [FilmUserController::class, 'destroyAll'])->name('filmUsers.destroyAll');
+Route::post('/filmUsers/{user}/destroyFilters', [FilmUserController::class, 'destroyFilters'])->name('filmUsers.destroyFilters');
 

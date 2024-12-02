@@ -26,7 +26,7 @@
                           <th>Título</th>
                           <th>Título original</th>
                           <th>Director</th>
-                          <th>Duración</th>
+                          <th>Duración (min.)</th>
                           <th>Año</th>
                           <th>Acciones</th>
                         </tr>

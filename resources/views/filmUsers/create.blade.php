@@ -2,11 +2,8 @@
     <x-slot name="header">
       <div class="flex">
         <h2 class="font-semibold text-xl text-warning leading-tight flex">
-            {{ __('Plataformas') }}
+            {{ __('Indica qué es lo que te gusta!') }}
         </h2>
-        <div class="ms-auto flex" align="right">
-          <a href="{{ route('admin.platforms.create') }}" class="btn btn-sm btn-warning">Crear nueva plataforma</a>
-        </div>
       </div>
     </x-slot>
 
@@ -14,22 +11,19 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-white">
-                  <x-header-title  :title="'Modificar los datos de la plataforma ' . $platform->id" subtitle="" :links="[]">
-                  </x-header-title>
-
-                  <form action="{{ route('admin.platforms.update', $platform) }}" method="POST">
+                  <form action="{{ route('admin.films.storeFilters', Auth::user()) }}" method="POST">
                     @csrf
-                    @method('PUT')
 
                     <div class="row">
                         <div class="col-12 col-md-12">
                           <x-admin-card>
-                            @include('admin.platforms.partials.form')
+                            @include('filmUsers.partials.form')
 
-                            @include('admin.platforms.partials.buttons')
+                            @include('filmUsers.partials.buttons')
                           </x-admin-card>
                         </div>
                     </div>
+
                   </form>
                 </div>
             </div>

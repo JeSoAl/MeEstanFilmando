@@ -10,7 +10,7 @@
   <x-input-error :messages="$errors->get('original')" class="mt-2" />
 </div>
 <div class="form-group mb-3">
-  <label for="duration" class="form-label">Duración</label>
+  <label for="duration" class="form-label">Duración (minutos)</label>
   <input class="form-control" type="number" id="duration" name="duration" value="{{ old('duration') ?? $film->duration }}">
   <x-input-error :messages="$errors->get('duration')" class="mt-2" />
 </div>
@@ -19,9 +19,16 @@
   <input class="form-control" type="number" min="1900" max="2099" id="year" name="year" value="{{ old('year') ?? $film->year }}">
   <x-input-error :messages="$errors->get('year')" class="mt-2" />
 </div>
+@if ($view == "edit")
+    @include('admin.films.partials.picture-edit')
+@endif
 <div class="form-group mb-3">
   <label for="director_id" class="form-label">Director</label>
-  <input class="form-control" list="directors" name="director_id" value="{{ old('director_id') ? $film->director->name : '' }}">
+  @if ($view == "edit")
+    <input class="form-control" list="directors" name="director_id" value="{{ old('director_id') ?? $film->director->name }}">
+  @else
+    <input class="form-control" list="directors" name="director_id">
+  @endif
   <datalist id="directors">
     @foreach ($directors as $director)
         <option value="{{ $director->name }}">
@@ -39,30 +46,30 @@
 <div id="genres">
     <label class="form-label">Géneros</label>
     <button type="button" class="btn btn-success w-s" onclick="addGenre()">
-        <i class="fa fa-plus" aria-hidden="true"></i>
+        <img src="/pictures/icons/plus.png" width="15">
     </button>
     @if ($view == "edit")
-        @include('films.partials.genre-edit')
+        @include('admin.films.partials.genre-edit')
     @endif
 </div>
 
 <div id="actors">
     <label class="form-label">Actores</label>
     <button type="button" class="btn btn-success w-s" onclick="addActor()">
-        <i class="fa fa-plus" aria-hidden="true"></i>
+        <img src="/pictures/icons/plus.png" width="15">
     </button>
     @if ($view == "edit")
-        @include('films.partials.actor-edit')
+        @include('admin.films.partials.actor-edit')
     @endif
 </div>
 
 <div id="platforms">
     <label class="form-label">Platafromas</label>
     <button type="button" class="btn btn-success w-s" onclick="addPlatform()">
-        <i class="fa fa-plus" aria-hidden="true"></i>
+        <img src="/pictures/icons/plus.png" width="15">
     </button>
     @if ($view == "edit")
-        @include('films.partials.platform-edit')
+        @include('admin.films.partials.platform-edit')
     @endif
 </div>
 
@@ -89,7 +96,7 @@
                                     @endforeach
                                 </select>
                                 <button type="button" class="btn btn-danger w-s" onclick="deleteGenre(`+ genreCount +`)">
-                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                    <img src="/pictures/icons/delete.png" width="15">
                                 </button>
                         </div>`;
         document.getElementById('genres').insertAdjacentHTML('beforeend', genreHTML);
@@ -105,7 +112,7 @@
                                     @endforeach
                                 </datalist>
                                 <button type="button" class="btn btn-danger w-s" onclick="deleteActor(`+ actorCount +`)">
-                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                    <img src="/pictures/icons/delete.png" width="15">
                                 </button>
                         </div>`;
         document.getElementById('actors').insertAdjacentHTML('beforeend', actorHTML);
@@ -120,7 +127,7 @@
                                     @endforeach
                                 </select>
                                 <button type="button" class="btn btn-danger w-s" onclick="deletePlatform(`+ platformCount +`)">
-                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                    <img src="/pictures/icons/delete.png" width="15">
                                 </button>
                         </div>`;
         document.getElementById('platforms').insertAdjacentHTML('beforeend', platformHTML);

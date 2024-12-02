@@ -14,8 +14,12 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-white">
-                  <x-header-title  :title="'Modificar los datos del film ' . $film->id" subtitle="" :links="[]">
+                  <x-header-title  :title="'Modificar los datos del filme ' . $film->id" subtitle="" :links="[]">
                   </x-header-title>
+
+                  <?php
+                    $view = "edit";
+                  ?>
 
                   <form action="{{ route('admin.films.update', ['film' => $film]) }}" method="POST">
                     @csrf
