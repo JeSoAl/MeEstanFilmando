@@ -19,6 +19,13 @@
   <input class="form-control" type="number" min="1900" max="2099" id="year" name="year" value="{{ old('year') ?? $film->year }}">
   <x-input-error :messages="$errors->get('year')" class="mt-2" />
 </div>
+<div class="form-group mb-3">
+    <label for="cinema" class="form-label">¿Se encuentra en cines?</label>
+    <select class="form-control chosen" id="cinema" name="cinema">
+    <option value="1" {{ $film->cinema == true ? 'selected="selected"' : '' }}>Sí</option>
+    <option value="0" {{ $film->cinema == false ? 'selected="selected"' : '' }}>No</option>
+    </select>
+</div>
 @if ($view == "edit")
     @include('admin.films.partials.picture-edit')
 @endif

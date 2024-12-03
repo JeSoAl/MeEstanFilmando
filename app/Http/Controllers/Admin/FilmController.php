@@ -75,6 +75,7 @@ class FilmController extends Controller
         $film->original = $request->original;
         $film->duration = $request->duration;
         $film->year = $request->year;
+        $film->cinema = $request->cinema;
         if ($director_id >= 0) {
             $film->director_id = $director_id;
         }
@@ -163,16 +164,7 @@ class FilmController extends Controller
      */
     public function show(Film $film)
     {
-        $directors = Director::all();
-        $actors = Actor::all();
-        $genres = Genre::all();
-        $awards = Award::all();
-        $platforms = Platform::all();
-        $filmGenres = $film->genres()->get();
-        $filmActors = $film->actors()->get();
-        $filmAwards = $film->awards()->get();
-        $filmPlatforms = $film->platforms()->get();
-        return view('admin.films.show', compact('film', 'genres', 'actors', 'awards', 'directors', 'platforms', 'filmGenres', 'filmActors', 'filmAwards', 'filmPlatforms'));
+        return view('admin.films.show', compact('film'));
     }
 
     /**
@@ -209,6 +201,8 @@ class FilmController extends Controller
         $film->original = $request->original;
         $film->duration = $request->duration;
         $film->year = $request->year;
+        $film->cinema = $request->cinema;
+        $film->picture = $request->picture;
         if ($director_id >= 0) {
             $film->director_id = $director_id;
         }

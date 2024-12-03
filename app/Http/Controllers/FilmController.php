@@ -43,7 +43,7 @@ class FilmController extends Controller
         $platforms = Platform::all();
 
 
-        $newUser = ['name' => 'x', 'email' => $user->name .''. $user->id .'@meestanfilmando', 'password' => '12345678', 'password_confirmation' => '12345678'];
+        $newUser = ['name' => 'x', 'email' => 'meestanfilmando'. $user->id .'@meestanfilmando', 'password' => '12345678', 'password_confirmation' => '12345678'];
         
         $newUser->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -216,10 +216,11 @@ class FilmController extends Controller
     // Generar lista de películas
     public static function generate(User $user)
     {
-        $films = Film::whereHas('genres', function($query) use ($user) { $query->whereIn('genre_id', $user->genre_ids()); }); 
+        $films = Film::where('cinema', false);
+        $films->whereHas('genres', function($query) use ($user) { $query->whereIn('genre_id', $user->genre_ids()); }); 
         $userGenres = UserGenre::where('user_id', $user->id)->where('type', 'false')->get();
         foreach ($userGenres as $userGenre) {
-            $films->whereHas('genres', function($query) use ($user) { $query->where('id', '!=', $userGenre->genre_id); });
+            $films->whereHas('genres', function($query) use ($userGenre) { $query->where('id', '!=', $userGenre->genre_id); });
         }
         $userDirectors = UserDirector::where('user_id', $user->id)->where('type', 'false')->get();
         foreach ($userDirectors as $userDirector) {
@@ -227,7 +228,7 @@ class FilmController extends Controller
         }
         $userActors = UserActor::where('user_id', $user->id)->where('type', 'false')->get();
         foreach ($userActors as $userActor) {
-            $films->whereHas('actors', function($query) use ($user) { $query->where('id', '!=', $userActor->actor_id); });
+            $films->whereHas('actors', function($query) use ($userActor) { $query->where('id', '!=', $userActor->actor_id); });
         }
         $actorFilms = Film::whereHas('actors', function($query) use ($user) { $query->whereIn('actor_id', $user->actor_ids()); })->get();
         $directorFilms = Film::whereHas('directors', function($query) use ($user) { $query->whereIn('director_id', $user->director_ids()); })->get();
@@ -242,7 +243,7 @@ class FilmController extends Controller
         }
         $userPlatforms = UserPlatform::where('user_id', $user->id)->get();
         foreach ($userPlatforms as $userPlatform) {
-            $films->whereHas('platforms', function($query) use ($user) { $query->where('id', $userPlatform->platform_id); });
+            $films->whereHas('platforms', function($query) use ($userPlatform) { $query->where('id', $userPlatform->platform_id); });
         }
         $films->inRandomOrder()->get(); 
         return $films;

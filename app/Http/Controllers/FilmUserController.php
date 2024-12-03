@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\FilmUser;
+use App\Models\User;
 use App\Models\Film;
+use App\Models\Genre;
 use App\Models\Actor;
 use App\Models\Director;
 use App\Models\Award;
@@ -20,7 +22,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\FilmController;
 use Illuminate\Http\Request;
 
-class FilmController extends Controller
+class FilmUserController extends Controller
 {
     /**
      * Show the form for creating a new resource.
@@ -44,8 +46,6 @@ class FilmController extends Controller
         $directors = Director::all();
         $actors = Actor::all();
         $platforms = Platform::all();
-
-        destroyFilters($user);
 
         // Iterar géneros
         foreach ($genres as $genre) {
@@ -77,7 +77,7 @@ class FilmController extends Controller
                     $userGenre = new UserGenre();
                     $userGenre->user_id = $user->id;
                     $userGenre->genre_id = $genre->id;
-                    $usergenre->type = false;
+                    $userGenre->type = false;
                     $userGenre->save();
                 }
             }
@@ -172,10 +172,17 @@ class FilmController extends Controller
                 }
             }
         }
+        
+        $user->recomendation = true;
+        $user->update();
 
-        $films = generate($user);
+        $films = $this->generate($user);
 
-        store($user, $films->first());
+        $film = $films->random();
+
+        $this->store($user, $film);
+
+        return to_route('filmUsers.show', compact('user'));
     }
     
     /**
@@ -187,22 +194,19 @@ class FilmController extends Controller
         $filmUser->user_id = $user->id;
         $filmUser->film_id = $film->id;
         $filmUser->save();
-
-        return to_route('filmUsers.show', compact('user'));
     }
+
     /**
      * Display the specified resource.
      */
     public function show(User $user)
     {
+        $array = $this->generate($user);
         $filmUsers = FilmUser::where('user_id', $user->id)->where('status', 'pinned');
         $filmUser = $filmUsers->first();
-        $film = Film::where('id', $filmUser->film_id);
-        $directors = Director::all();
-        $actors = $film->actors()->get();
-        $genres = $film->genres()->get();
-        $platforms = $film->platforms()->get();
-        return view('filmsUsers.show', compact('film', 'genres', 'actors', 'directors', 'platforms'));
+        $films = Film::where('id', $filmUser->film_id);
+        $film = $films->first();
+        return view('filmUsers.show', compact('film', 'array'));
     }
 
     /**
@@ -223,9 +227,13 @@ class FilmController extends Controller
         $filmUser->status = FilmUser::STATUS_DONTSHOW;
         $filmUser->update();
         
-        $films = generate($user);
+        $films = $this->generate($user);
 
-        store($user, $films->first());
+        $film = $films->random();
+
+        $this->store($user, $film);
+
+        return to_route('filmUsers.show', compact('user'));
     }
 
     /**
@@ -237,9 +245,13 @@ class FilmController extends Controller
         $filmUser = $filmUsers->first();
         $filmUser->delete();
         
-        $films = generate($user);
+        $films = $this->generate($user);
 
-        store($user, $films->first());
+        $film = $films->random();
+
+        $this->store($user, $film);
+
+        return to_route('filmUsers.show', compact('user'));
     }
 
     /**
@@ -251,6 +263,8 @@ class FilmController extends Controller
         foreach ($filmUsers as $filmUser) {
             $filmUser->delete();
         }
+        $user->recomendation = false;
+        $user->update();
         
         return to_route('dashboard');
     }
@@ -289,44 +303,32 @@ class FilmController extends Controller
                 $userActor->delete();
             }
         }
+
+        $directors = Director::all();
+        $actors = Actor::all();
+        $genres = Genre::all();
+        $platforms = Platform::all();
+        $filmUser = new FilmUser();
+        return to_route('filmUsers.create', compact('filmUser', 'genres', 'actors', 'directors', 'platforms'));
     }
 
     // Generar lista de películas
     public static function generate(User $user)
     {
-        $films = Film::whereHas('genres', function($query) use ($user) { $query->whereIn('genre_id', $user->genre_ids()); }); 
-        $userGenres = UserGenre::where('user_id', $user->id)->where('type', 'false')->get();
-        foreach ($userGenres as $userGenre) {
-            $films->whereHas('genres', function($query) use ($user) { $query->where('id', '!=', $userGenre->genre_id); });
-        }
-        $userDirectors = UserDirector::where('user_id', $user->id)->where('type', 'false')->get();
-        foreach ($userDirectors as $userDirector) {
-            $films->where('director_id', '!=', $userDirector->director_id);
-        }
-        $userActors = UserActor::where('user_id', $user->id)->where('type', 'false')->get();
-        foreach ($userActors as $userActor) {
-            $films->whereHas('actors', function($query) use ($user) { $query->where('id', '!=', $userActor->actor_id); });
-        }
-        $actorFilms = Film::whereHas('actors', function($query) use ($user) { $query->whereIn('actor_id', $user->actor_ids()); })->get();
-        $directorFilms = Film::whereHas('directors', function($query) use ($user) { $query->whereIn('director_id', $user->director_ids()); })->get();
-        $films = $films->merge($actorFilms);
-        $films = $films->merge($directorFilms);
+        $filmUsers = FilmUser::where('user_id', $user->id);
+        $filmIds = [];
         $i = 0;
-        foreach ($films as $film) {
-            $i++;
+        foreach ($filmUsers as $filmUser) {
+            if ($filmUser->status == User::STATUS_DONTSHOW) {
+                $filmIds[$i] = $filmUser->film_id;
+                $i++;
+            }
         }
-        if ($i === 0) {
+        $films = Film::whereNotIn('id', $filmIds)->get();
+        $n = $films->count();
+        if ($n === 0) {
             $films = Film::all();
         }
-        $userPlatforms = UserPlatform::where('user_id', $user->id)->get();
-        foreach ($userPlatforms as $userPlatform) {
-            $films->whereHas('platforms', function($query) use ($user) { $query->where('id', $userPlatform->platform_id); });
-        }
-        $filmUsers = FilmUser::where('user_id', $user->id);
-        foreach ($filmUsers as $filmUser) {
-            $films->where('id', '!=', $filmUser->film_id);
-        }
-        $films->inRandomOrder()->get(); 
         return $films;
     }
 }

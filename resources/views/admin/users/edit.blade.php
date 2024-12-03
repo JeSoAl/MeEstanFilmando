@@ -27,14 +27,6 @@
                             @include('admin.users.partials.form')
 
                             <div class="form-group mb-3">
-                                <label for="suscription" class="form-label">Suscripción</label>
-                                <select class="form-control chosen" id="suscription" name="suscription">
-                                <option value="1" {{ $user->suscription == true ? 'selected="selected"' : '' }}>Sí</option>
-                                <option value="0" {{ $user->suscription == false ? 'selected="selected"' : '' }}>No</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group mb-3">
                                 <label for="admin" class="form-label">Administrador</label>
                                 <select class="form-control chosen" id="admin" name="admin">
                                 <option value="1" {{ $user->admin == true ? 'selected="selected"' : '' }}>Sí</option>

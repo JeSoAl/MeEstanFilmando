@@ -35,7 +35,7 @@ class Director extends Model
      */
     public function films(): HasMany
     {
-        return $this->hasMany(Film::class);
+        return $this->hasMany(Film::class, 'film_directors');
     }
     
     /**
@@ -43,7 +43,7 @@ class Director extends Model
      */
     public function awards(): BelongsToMany
     {
-        return $this->belongsToMany(Award::class);
+        return $this->belongsToMany(Award::class, 'director_awards');
     }
     
     /**
@@ -51,7 +51,7 @@ class Director extends Model
      */
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'user_directors');
     }
 
     public function award_ids() {

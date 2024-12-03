@@ -88,7 +88,7 @@ class User extends Authenticatable
      */
     public function films(): BelongsToMany
     {
-        return $this->belongsToMany(Film::class);
+        return $this->belongsToMany(Film::class, 'film_users');
     }
     
     /**
@@ -96,7 +96,7 @@ class User extends Authenticatable
      */
     public function platforms(): BelongsToMany
     {
-        return $this->belongsToMany(Platform::class);
+        return $this->belongsToMany(Platform::class, 'user_platforms');
     }
     
     /**
@@ -104,7 +104,7 @@ class User extends Authenticatable
      */
     public function genres(): BelongsToMany
     {
-        return $this->belongsToMany(Genre::class);
+        return $this->belongsToMany(Genre::class, 'user_genres');
     }
     
     /**
@@ -112,7 +112,7 @@ class User extends Authenticatable
      */
     public function directors(): BelongsToMany
     {
-        return $this->belongsToMany(Director::class);
+        return $this->belongsToMany(Director::class, 'user_directors');
     }
     
     /**
@@ -120,14 +120,14 @@ class User extends Authenticatable
      */
     public function actors(): BelongsToMany
     {
-        return $this->belongsToMany(Actor::class);
+        return $this->belongsToMany(Actor::class, 'user_actors');
     }
 
     public function genre_ids() {
         $genres = [];
         $i = 0;
         foreach ($this->genres as $genre) {
-            if ($genre->pivot->type == true) {
+            if ($genre->pivot->type == 1) {
                 $genres[$i] = $genre->id;
                 $i++;
             }
@@ -139,7 +139,7 @@ class User extends Authenticatable
         $directors = [];
         $i = 0;
         foreach ($this->directors as $director) {
-            if ($director->pivot->type == true) {
+            if ($director->pivot->type == 1) {
                 $directors[$i] = $director->id;
                 $i++;
             }
@@ -151,11 +151,33 @@ class User extends Authenticatable
         $actors = [];
         $i = 0;
         foreach ($this->actors as $actor) {
-            if ($actor->pivot->type == true) {
+            if ($actor->pivot->type == 1) {
                 $actors[$i] = $actor->id;
                 $i++;
             }
         }
         return $actors;
+    }
+
+    public function platform_ids() {
+        $platforms = [];
+        $i = 0;
+        foreach ($this->platforms as $platform) {
+            $platforms[$i] = $platform->id;
+            $i++;
+        }
+        return $platforms;
+    }
+
+    public function film_ids() {
+        $films = [];
+        $i = 0;
+        foreach ($this->films as $film) {
+            if ($film->pivot->status == 'dontshow') {
+                $films[$i] = $film->id;
+                $i++;
+            }
+        }
+        return $films;
     }
 }

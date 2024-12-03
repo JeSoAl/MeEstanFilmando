@@ -147,13 +147,13 @@
     <label class="form-label" for="27no">No, sagas no</label><br>
     </div>
     <div class="form-group mb-3">
-    <label class="form-label">¿Qué tipos de idustria te gustan? Escoge todos los que quieras</label><br>
-    <input type="checkbox" id="3checkboxYes" name="3checkboxYes" value="true">
-    <label class="form-label" for="3checkboxYes">Hollywood</label><br>
-    <input type="checkbox" id="1checkboxYes" name="1checkboxYes" value="true">
-    <label class="form-label" for="1checkboxYes">Español</label><br>
-    <input type="checkbox" id="2checkboxYes" name="2checkboxYes" value="true">
-    <label class="form-label" for="2checkboxYes">Internacional</label><br>
+    <label class="form-label">¿Qué tipos de idustria no te gustan? Escoge todas las opciones que quieras</label><br>
+    <input type="checkbox" id="3checkboxNo" name="3checkboxNo" value="true">
+    <label class="form-label" for="3checkboxNo">Hollywood</label><br>
+    <input type="checkbox" id="1checkboxNo" name="1checkboxNo" value="true">
+    <label class="form-label" for="1checkboxNo">Español</label><br>
+    <input type="checkbox" id="2checkboxNo" name="2checkboxNo" value="true">
+    <label class="form-label" for="2checkboxNo">Internacional (resto del mundo)</label><br>
     </div>
     <div class="form-group mb-3">
     <label class="form-label">¿Qué prefieres?¿Un cine más clásico?¿Algo más experimental? Escoge las dos opciones si así gustas</label><br>
@@ -163,22 +163,28 @@
     <label class="form-label" for="28checkboxYes">Experimental</label><br>
     </div>
     <div class="form-group mb-3">
-    <label class="form-label">¿Prefieres que la historia se base en alguna época en concreto? Escoge todas las opciones que quieras</label><br>
-    <input type="checkbox" id="21checkboxYes" name="21checkboxYes" value="true">
-    <label class="form-label" for="21checkboxYes">Antigua y anterior</label><br>
-    <input type="checkbox" id="22checkboxYes" name="22checkboxYes" value="true">
-    <label class="form-label" for="22checkboxYes">Medieval</label><br>
-    <input type="checkbox" id="23checkboxYes" name="23checkboxYes" value="true">
-    <label class="form-label" for="23checkboxYes">Moderna</label><br>
-    <input type="checkbox" id="24checkboxYes" name="24checkboxYes" value="true">
-    <label class="form-label" for="24checkboxYes">Contemporánea</label><br>
-    <input type="checkbox" id="25checkboxYes" name="25checkboxYes" value="true">
-    <label class="form-label" for="25checkboxYes">Futurista</label><br>
+    <label class="form-label">¿Prefieres que la historia no esté basada en alguna época en concreto? Escoge todas las opciones que quieras</label><br>
+    <input type="checkbox" id="21checkboxNo" name="21checkboxNo" value="true">
+    <label class="form-label" for="21checkboxNo">Antigua y anterior</label><br>
+    <input type="checkbox" id="22checkboxNo" name="22checkboxNo" value="true">
+    <label class="form-label" for="22checkboxNo">Medieval</label><br>
+    <input type="checkbox" id="23checkboxNo" name="23checkboxNo" value="true">
+    <label class="form-label" for="23checkboxNo">Moderna</label><br>
+    <input type="checkbox" id="24checkboxNo" name="24checkboxNo" value="true">
+    <label class="form-label" for="24checkboxNo">Contemporánea</label><br>
+    <input type="checkbox" id="25checkboxNo" name="25checkboxNo" value="true">
+    <label class="form-label" for="25checkboxNo">Futurista</label><br>
+    <input type="checkbox" id="32checkboxNo" name="32checkboxNo" value="true">
+    <label class="form-label" for="32checkboxNo">Atemporal o Incierto</label><br>
     </div>
     <div class="form-group mb-3">
     <label class="form-label">¿A qué plataformas de streaming tienes acceso?¿A todas ;p? Selecciona todas las opciones que quieras</label><br>
+        <button type="button" class="btn btn-dark w-s" onclick="setPlatformsChecked()">
+            <img src="/pictures/icons/check.png" width="10">
+        </button>
+        <label class="form-label text-grey-500">Seleccionar todas</label><br>
     @foreach ($platforms as $platform)
-        <input type="checkbox" id="{{ $platform->id }}checkboxPlatform" name="{{ $platform->id }}checkboxPlatform" value="true">
+        <input class="platformCheck" type="checkbox" id="{{ $platform->id }}checkboxPlatform" name="{{ $platform->id }}checkboxPlatform" value="true">
         <label class="form-label" for="{{ $platform->id }}checkboxPlatform">{{ $platform->name }}</label><br>
     @endforeach
     </div>
@@ -189,20 +195,6 @@
         $trueActorCount = 0;
         $falseActorCount = 0;
     ?>
-
-    <div id="trueDirectors">
-        <label class="form-label">¿Tienes alguna preferencia en cuanto directores?</label>
-        <button type="button" class="btn btn-dark w-s" onclick="addTrueDirector()">
-            <img src="/pictures/icons/plus.png" width="15">
-        </button>
-    </div>
-
-    <div id="trueActors">
-        <label class="form-label">¿Hay algún actor o alguna actriz que sea tu debilidad?</label>
-        <button type="button" class="btn btn-dark w-s" onclick="addTrueActor()">
-            <img src="/pictures/icons/plus.png" width="15">
-        </button>
-    </div>
 
     <div id="falseDirectors">
         <label class="form-label">¿Hay algún director al que prefieras pasar por alto?</label>
@@ -233,9 +225,13 @@
     let trueActorCount = trueActors.length;
     let falseActorCount = falseActors.length;
 
+    function setPlatformsChecked() {
+        document.getElementsByClassName("platformCheck").checked = true;
+    }
+
     function addTrueDirector() {
         const trueDirectorHTML = `<div class="form-group mb-3 trueDirector" id="trueDirector`+ trueDirectorCount +`">
-                                <input class="form-control" list="trueDirector_names" name="trueDirectors[`+ trueDirectorCount +`][director_name]">
+                                <input class="form-control" list="director_names" name="trueDirectors[`+ trueDirectorCount +`][director_name]">
                                 <datalist id="director_names">
                                     @foreach ($directors as $director)
                                         <option value="{{ $director->name }}">
@@ -251,7 +247,7 @@
 
     function addFalseDirector() {
         const falseDirectorHTML = `<div class="form-group mb-3 falseDirector" id="falseDirector`+ falseDirectorCount +`">
-                                <input class="form-control" list="falseDirector_names" name="falseDirectors[`+ falseDirectorCount +`][director_name]">
+                                <input class="form-control" list="director_names" name="falseDirectors[`+ falseDirectorCount +`][director_name]">
                                 <datalist id="director_names">
                                     @foreach ($directors as $director)
                                         <option value="{{ $director->name }}">
@@ -267,7 +263,7 @@
 
     function addTrueActor() {
         const trueActorHTML = `<div class="form-group mb-3 trueActor" id="trueActor`+ trueActorCount +`">
-                                <input class="form-control" list="trueActor_names" name="trueActors[`+ trueActorCount +`][actor_name]">
+                                <input class="form-control" list="actor_names" name="trueActors[`+ trueActorCount +`][actor_name]">
                                 <datalist id="actor_names">
                                     @foreach ($actors as $actor)
                                         <option value="{{ $actor->name }}">
@@ -283,7 +279,7 @@
 
     function addFalseActor() {
         const falseActorHTML = `<div class="form-group mb-3 falseActor" id="falseActor`+ falseActorCount +`">
-                                <input class="form-control" list="falseActor_names" name="falseActors[`+ falseActorCount +`][actor_name]">
+                                <input class="form-control" list="actor_names" name="falseActors[`+ falseActorCount +`][actor_name]">
                                 <datalist id="actor_names">
                                     @foreach ($actors as $actor)
                                         <option value="{{ $actor->name }}">

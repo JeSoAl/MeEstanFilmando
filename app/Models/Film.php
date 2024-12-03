@@ -11,6 +11,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Film extends Model
 {
     use HasFactory;
+    
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'films';
 
     /**
      * The attributes that are mass assignable.
@@ -56,7 +63,7 @@ class Film extends Model
      */
     public function genres(): BelongsToMany
     {
-        return $this->belongsToMany(Genre::class);
+        return $this->belongsToMany(Genre::class, 'film_genres');
     }
     
     /**
@@ -64,7 +71,7 @@ class Film extends Model
      */
     public function actors(): BelongsToMany
     {
-        return $this->belongsToMany(Actor::class);
+        return $this->belongsToMany(Actor::class, 'film_actors');
     }
     
     /**
@@ -72,7 +79,7 @@ class Film extends Model
      */
     public function awards(): BelongsToMany
     {
-        return $this->belongsToMany(Award::class);
+        return $this->belongsToMany(Award::class, 'film_awards');
     }
     
     /**
@@ -80,7 +87,7 @@ class Film extends Model
      */
     public function platforms(): BelongsToMany
     {
-        return $this->belongsToMany(Platform::class);
+        return $this->belongsToMany(Platform::class, 'film_platforms');
     }
     
     /**
@@ -88,6 +95,16 @@ class Film extends Model
      */
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'film_users');
+    }
+
+    public function actor_ids() {
+        $actors = [];
+        $i = 0;
+        foreach ($this->actors as $actor) {
+                $actors[$i] = $actor->id;
+                $i++;
+        }
+        return $actors;
     }
 }

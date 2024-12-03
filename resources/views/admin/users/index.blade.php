@@ -25,7 +25,7 @@
                           <th>ID</th>
                           <th>Nombre</th>
                           <th>Correo</th>
-                          <th>Suscripción</th>
+                          <th>Recomendación</th>
                           <th>Administrador</th>
                           <th>Acciones</th>
                         </tr>
@@ -37,7 +37,7 @@
                           <td>{{ $user->id ? $user->id : '' }}</td>
                           <td>{{ $user->name ? $user->name : '' }}</td>
                           <td>{{ $user->email ? $user->email : '' }}</td>
-                          <td>{{ $user->suscription ? 'Sí' : 'No' }}</td>
+                          <td>{{ $user->recomendation ? 'Sí' : 'No' }}</td>
                           <td>{{ $user->admin ? 'Sí' : 'No' }}</td>
                           <td class="d-flex">
                             <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-primary btn-sm me-1">

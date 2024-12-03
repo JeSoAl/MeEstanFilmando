@@ -9,6 +9,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Actor extends Model
 {
     use HasFactory;
+    
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'actors';
 
     /**
      * The attributes that are mass assignable.
@@ -34,7 +41,7 @@ class Actor extends Model
      */
     public function films(): BelongsToMany
     {
-        return $this->belongsToMany(Film::class);
+        return $this->belongsToMany(Film::class, 'film_actors');
     }
     
     /**
@@ -42,7 +49,7 @@ class Actor extends Model
      */
     public function awards(): BelongsToMany
     {
-        return $this->belongsToMany(Award::class);
+        return $this->belongsToMany(Award::class, 'actor_awards');
     }
     
     /**
@@ -50,6 +57,6 @@ class Actor extends Model
      */
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'user_actors');
     }
 }

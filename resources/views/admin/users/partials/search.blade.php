@@ -15,8 +15,8 @@
         </div>
 
         <div class="form-group col-xs-1 col-sm-2 col-lg-3 col-xl-4 mx-2">
-            <label for="suscription" class="form-label">Suscripción</label>
-            <select class="form-control chosen" id="suscription" name="suscription">
+            <label for="recomendation" class="form-label">Recomendación</label>
+            <select class="form-control chosen" id="recomendation" name="recomendation">
             <option value=''></option>
             <option value="1">Sí</option>
             <option value="0">No</option>
