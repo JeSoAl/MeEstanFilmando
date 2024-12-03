@@ -127,7 +127,7 @@ class User extends Authenticatable
         $genres = [];
         $i = 0;
         foreach ($this->genres as $genre) {
-            if ($genre->pivot->type == 1) {
+            if ($genre->pivot->type == false) {
                 $genres[$i] = $genre->id;
                 $i++;
             }

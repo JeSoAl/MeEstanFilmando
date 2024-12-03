@@ -11,13 +11,13 @@ class AvatarsService {
     * @param Request $request
     **/ 
   public function search($request) {
-    $avatars = Avatar::all();
+    $avatars = Avatar::query();
 
     if ($request->has('description') && $request->description != '') {
       $avatars->where('description', 'like', '%' . $request->description . '%');
     }
 
-    $avatars->orderByRaw($request->sort_by ?? 'avatars.id desc');
+    $avatars->orderByRaw($request->sort_by ?? 'avatars.id asc');
 
     return $avatars;
   }

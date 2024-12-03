@@ -272,9 +272,10 @@ class FilmUserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public static function destroyFilters(User $user)
+    public function destroyFilters(User $user)
     {
-        $filmUser = FilmUser::where('user_id', $user->id)->where('status', 'pinned')->first();
+        $filmUsers = FilmUser::where('user_id', $user->id)->where('status', 'pinned')->get();
+        $filmUser = $filmUsers->first();
         $userGenres = UserGenre::all();
         $userPlatforms = UserPlatform::all();
         $userDirectors = UserDirector::all();
@@ -313,21 +314,26 @@ class FilmUserController extends Controller
     }
 
     // Generar lista de películas
-    public static function generate(User $user)
+    public function generate(User $user)
     {
-        $filmUsers = FilmUser::where('user_id', $user->id);
+        $filmUsers = FilmUser::where('user_id', $user->id)->get();
         $filmIds = [];
         $i = 0;
         foreach ($filmUsers as $filmUser) {
-            if ($filmUser->status == User::STATUS_DONTSHOW) {
+            if ($filmUser->status == 'dontshow') {
                 $filmIds[$i] = $filmUser->film_id;
                 $i++;
             }
         }
-        $films = Film::whereNotIn('id', $filmIds)->get();
+        $films = Film::whereNotIn('id', $filmIds)->where('cinema', 0);
+        $userGenres = UserGenre::where('user_id', $user->id)->where('type', 'false')->get();
+        foreach ($userGenres as $userGenre) {
+            $films->whereHas('genres', function($query) use ($userGenre) { $query->where('id', '!=', $userGenre->genre_id); });
+        }
+        $films->get();
         $n = $films->count();
         if ($n === 0) {
-            $films = Film::all();
+            $films = Film::where('cinema', 0)->get();
         }
         return $films;
     }

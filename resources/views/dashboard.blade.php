@@ -33,15 +33,13 @@
                                 <button class="btn btn-warning col-10">Obtén una nueva recomendación!</button>
                             </section>
                         </a>
-                        <a
-                            href="{{ route('filmUsers.destroyFilters', $user) }}"
-                            style="text-decoration:none;"
-                            class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                        >
+                        <form action="{{ route('filmUsers.destroyFilters', $user) }}" method="POST" class="me-1">
+                        @csrf
+                        
                             <section class="row justify-content-around">
-                                <button class="btn btn-warning col-10">¿Han cambiado tus gustos? Indica qué es lo que te gusta ahora!</button>
+                                <button type="submit" class="btn btn-warning col-10">¿Han cambiado tus gustos? Indica qué es lo que te gusta ahora!</button>
                             </section>
-                        </a>
+                        </form>
                     @endif
                 </div>
             </div>

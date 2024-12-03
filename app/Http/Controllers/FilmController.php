@@ -216,8 +216,7 @@ class FilmController extends Controller
     // Generar lista de películas
     public static function generate(User $user)
     {
-        $films = Film::where('cinema', false);
-        $films->whereHas('genres', function($query) use ($user) { $query->whereIn('genre_id', $user->genre_ids()); }); 
+        $films = Film::whereHas('genres', function($query) use ($user) { $query->whereIn('genre_id', $user->genre_ids()); }); 
         $userGenres = UserGenre::where('user_id', $user->id)->where('type', 'false')->get();
         foreach ($userGenres as $userGenre) {
             $films->whereHas('genres', function($query) use ($userGenre) { $query->where('id', '!=', $userGenre->genre_id); });
@@ -230,10 +229,6 @@ class FilmController extends Controller
         foreach ($userActors as $userActor) {
             $films->whereHas('actors', function($query) use ($userActor) { $query->where('id', '!=', $userActor->actor_id); });
         }
-        $actorFilms = Film::whereHas('actors', function($query) use ($user) { $query->whereIn('actor_id', $user->actor_ids()); })->get();
-        $directorFilms = Film::whereHas('directors', function($query) use ($user) { $query->whereIn('director_id', $user->director_ids()); })->get();
-        $films = $films->merge($actorFilms);
-        $films = $films->merge($directorFilms);
         $i = 0;
         foreach ($films as $film) {
             $i++;

@@ -21,7 +21,7 @@ class AvatarController extends Controller
      */
     public function index(Request $request)
     {
-        $avatars = $this->avatarsService->search($request)->get();
+        $avatars = $this->avatarsService->search($request)->paginate($request->get('per_page', 10));
         return view('admin.avatars.index', compact('avatars', 'request'));
     }
 

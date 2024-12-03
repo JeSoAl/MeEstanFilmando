@@ -156,11 +156,11 @@
     <label class="form-label" for="2checkboxNo">Internacional (resto del mundo)</label><br>
     </div>
     <div class="form-group mb-3">
-    <label class="form-label">¿Qué prefieres?¿Un cine más clásico?¿Algo más experimental? Escoge las dos opciones si así gustas</label><br>
-    <input type="checkbox" id="18checkboxYes" name="18checkboxYes" value="true">
-    <label class="form-label" for="18checkboxYes">Clásico</label><br>
-    <input type="checkbox" id="28checkboxYes" name="28checkboxYes" value="true">
-    <label class="form-label" for="28checkboxYes">Experimental</label><br>
+    <label class="form-label">¿Qué te gusta menos?¿Un cine más clásico?¿Algo más experimental? No escojas ninguna si te van las dos.</label><br>
+    <input type="checkbox" id="18checkboxNo" name="18checkboxNo" value="true">
+    <label class="form-label" for="18checkboxNo">Clásico</label><br>
+    <input type="checkbox" id="28checkboxNo" name="28checkboxNo" value="true">
+    <label class="form-label" for="28checkboxNo">Experimental</label><br>
     </div>
     <div class="form-group mb-3">
     <label class="form-label">¿Prefieres que la historia no esté basada en alguna época en concreto? Escoge todas las opciones que quieras</label><br>
