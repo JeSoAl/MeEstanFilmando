@@ -8,7 +8,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+                <div class="p-6 text-white">
                     <p>Lorem ipsum dolor sit amet consectetur adipiscing elit gravida habitant ultrices nisl,
                         libero per quam porttitor hac fringilla sagittis litora himenaeos volutpat. Egestas viverra netus
                         non vulputate conubia torquent phasellus curae vehicula, facilisis dapibus nisl lacinia lacus felis
