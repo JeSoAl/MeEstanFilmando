@@ -11,7 +11,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-white">
-                  <x-header-title  :title="'Modificar algunos de tus datos'" subtitle="" :links="[]">
+                  <x-header-title  :title="'Modifica algunos de tus datos'" subtitle="" :links="[]">
                   </x-header-title>
 
                   <form action="{{ route('users.update', $user) }}" method="POST">
@@ -65,17 +65,72 @@
                         </div>
                     </div>
                   </form>
-                  
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-white">
+                  <x-header-title  :title="'Cambiar Contraseña'" subtitle="" :links="[]">
+                  </x-header-title>
                   <x-admin-card>
-                    <form action="{{ route('users.destroy', $user) }}" method="POST" class="me-1"
-                        data-confirm="¿Está seguro de eliminar el elemento seleccionado?">
-                        @csrf
+                  <form method="POST" action="{{ route('password.store', ['user' => $user]) }}">
+                    @csrf
 
-                        Eliminar Cuenta
-                        <button type="submit" class="btn btn-danger btn-sm">
-                        <img src="/pictures/icons/delete.png" width="15">
-                        </button>
-                    </form>
+                    <!-- Password -->
+                    <div class="mt-4">
+                        <x-input-label for="password" :value="__('Nueva Contraseña')" />
+                        <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
+                        <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="mt-4">
+                        <x-input-label for="password_confirmation" :value="__('Confirmar Contraseña Nueva')" />
+
+                        <x-text-input id="password_confirmation" class="block mt-1 w-full"
+                                            type="password"
+                                            name="password_confirmation" required autocomplete="new-password" />
+
+                        <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+                    </div>
+
+                    
+                    <div class="form-group mb-3 d-flex">
+                        <div class="ms-auto">
+                            <a href="{{ route('dashboard') }}" class="text me-4">Cancelar</a>
+                            <button type="submit" class="btn btn-warning w-md">Cambiar Contraseña</button>
+                        </div>
+                    </div>
+                  </form>
+                  </x-admin-card>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-white">
+                  <x-header-title  :title="'Eliminar cuenta'" subtitle="" :links="[]">
+                  </x-header-title>
+                  <x-admin-card>
+                    <p>Asegúrese antes de apretar el botón. La operación no se puede revertir</p>
+                    <div class="form-group mb-3 d-flex">
+                        <div class="ms-auto row">
+                            <a href="{{ route('dashboard') }}" class="text me-4 col">Cancelar</a>
+                            <form action="{{ route('users.destroy', $user) }}" method="POST" class="me-1 col"
+                                data-confirm="¿Está seguro de eliminar el elemento seleccionado?">
+                                @csrf
+                                
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                <img src="/pictures/icons/delete.png" width="15">
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                   </x-admin-card>
                 </div>
             </div>

@@ -27,12 +27,6 @@
                             {{ __('Nosotros') }}
                         </x-nav-link>
                     </div>
-
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('password.reset', $user)" :active="request()->routeIs('password.reset', $user)">
-                            {{ __('Cambiar contraseña') }}
-                        </x-nav-link>
-                    </div>
                 
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('users.edit', $user)" :active="request()->routeIs('users.edit', $user)">
@@ -140,6 +134,7 @@
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
+                <div><img class="rounded-circle" src="{{$user->avatar->picture}}" width="30"></div>
                 <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
             </div>

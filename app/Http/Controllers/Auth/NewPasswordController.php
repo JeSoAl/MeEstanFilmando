@@ -34,23 +34,15 @@ class NewPasswordController extends Controller
     public function store(Request $request, User $user): RedirectResponse
     {
         $data = $request->session()->all();
-        $request->validate([
+        $validated = $request->validate([
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // Here we will attempt to reset the user's password. If it is successful we
-        // will update the password on an actual user model and persist it to the
-        // database. Otherwise we will parse the error and return the response.
-        $status = Password::reset(
-            $request->only('password', 'password_confirmation'),
-            function ($user) use ($request) {
-                $user->forceFill([
-                    'password' => Hash::make($request->password),
-                ])->save();
+        
 
-                event(new PasswordReset($user));
-            }
-        );
+        $request->user()->update([
+            'password' => Hash::make($validated['password']),
+        ]);
         
         Auth::guard('web')->logout();
 
