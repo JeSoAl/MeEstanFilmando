@@ -16,11 +16,6 @@
             <div class="bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-white">
                     <div class="row">
-                        <p>
-                        @foreach ($array as $cosa)
-                            [{{$cosa->title}}], 
-                        @endforeach
-                        </p>
                         @include('layouts.show-film')
                         @include('filmUsers.partials.show-buttons')
                     </div>

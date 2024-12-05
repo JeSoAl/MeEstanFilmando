@@ -12,11 +12,6 @@
             <div class="bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-white">
                     <div class="row">
-                        <p>
-                        @foreach ($films as $cosa)
-                            [{{$cosa->title}}], 
-                        @endforeach
-                        </p>
                         @include('layouts.show-film')
                         @include('films.partials.show-buttons')
                     </div>

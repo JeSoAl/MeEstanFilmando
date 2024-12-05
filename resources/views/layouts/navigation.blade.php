@@ -34,12 +34,7 @@
                         </x-nav-link>
                     </div>
 
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit">Cerrar sesión</button>
-                    </form>
-
-                    @else
+                @else
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('/')" :active="request()->routeIs('/')">
                             {{ __('Inicio') }}

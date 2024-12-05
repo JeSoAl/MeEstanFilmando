@@ -117,7 +117,7 @@
                   <x-header-title  :title="'Eliminar cuenta'" subtitle="" :links="[]">
                   </x-header-title>
                   <x-admin-card>
-                    <p>Asegúrese antes de apretar el botón. La operación no se puede revertir</p>
+                    <p>Asegúrese antes de apretar el botón. La operación no se puede revertir.</p>
                     <div class="form-group mb-3 d-flex">
                         <div class="ms-auto row">
                             <a href="{{ route('dashboard') }}" class="text me-4 col">Cancelar</a>

@@ -85,7 +85,7 @@
     <div class="form-group mb-3">
     <label class="form-label">¿Qué opinión te merece el género policiaco?</label><br>
     <input type="radio" id="13yes" name="13radio" value="yes" required>
-    <label class="form-label" for="13yes">Correcto, adelante con él</label><br>
+    <label class="form-label" for="13yes">Correcto, adelante con ello</label><br>
     <input type="radio" id="13no" name="13radio" value="no">
     <label class="form-label" for="13no">Que mejor no</label><br>
     </div>
@@ -165,7 +165,7 @@
     <label class="form-label" for="27no">No, sagas no</label><br>
     </div>
     <div class="form-group mb-3">
-    <label class="form-label">¿Qué tipos de idustria no te gustan? Escoge todas las opciones que quieras</label><br>
+    <label class="form-label">¿Qué tipos de industria no te gustan? No escojas ninguna si te gustan todas.</label><br>
     <input type="checkbox" id="3checkboxNo" name="3checkboxNo" value="true">
     <label class="form-label" for="3checkboxNo">Hollywood</label><br>
     <input type="checkbox" id="1checkboxNo" name="1checkboxNo" value="true">
@@ -195,7 +195,7 @@
 
   <div id="card5" class="d-none">
     <div class="form-group mb-3">
-    <label class="form-label">¿Hay alguna época que no te guste? Escoge todas las opciones que quieras</label><br>
+    <label class="form-label">¿Hay alguna época que no te guste? No escojas ninguna si te da igual la época en la que se base el filme.</label><br>
     <input type="checkbox" id="21checkboxNo" name="21checkboxNo" value="true">
     <label class="form-label" for="21checkboxNo">Antigua y anterior</label><br>
     <input type="checkbox" id="22checkboxNo" name="22checkboxNo" value="true">
