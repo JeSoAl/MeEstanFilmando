@@ -14,7 +14,7 @@ class CommentsService {
     $comments = Comment::query()->with(['film', 'user', 'comment']);
 
     if ($request->has('content') && $request->content != '') {
-      $comments->where('content', $request->content);
+      $comments->where('content', 'like', '%' . $request->content . '%');
     }
 
     if ($request->has('film_id') && $request->film_id != '') {

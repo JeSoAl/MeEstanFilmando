@@ -3,6 +3,7 @@
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FilmUserController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,4 +52,12 @@ Route::get('/filmUsers/{user}/show', [FilmUserController::class, 'show'])->name(
 Route::post('/filmUsers/{user}/destroy', [FilmUserController::class, 'destroy'])->name('filmUsers.destroy');
 Route::post('/filmUsers/{user}/destroyAll', [FilmUserController::class, 'destroyAll'])->name('filmUsers.destroyAll');
 Route::post('/filmUsers/{user}/destroyFilters', [FilmUserController::class, 'destroyFilters'])->name('filmUsers.destroyFilters');
+
+Route::get('/comments/{film}/index', [CommentController::class, 'index'])->name('comments.index');
+Route::get('/comments/create', [CommentController::class, 'create'])->name('comments.create');
+Route::post('/comments/store', [CommentController::class, 'store'])->name('comments.store');
+Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
+Route::put('/comments/{comment}/update', [CommentController::class, 'update'])->name('comments.update');
+Route::get('/comments/{comment}/show', [CommentController::class, 'show'])->name('comments.show');
+Route::post('/comments/{comment}/destroy', [CommentController::class, 'destroy'])->name('comments.destroy');
 

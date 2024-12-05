@@ -8,17 +8,36 @@ use App\Models\Actor;
 use App\Models\Director;
 use App\Models\Award;
 use App\Models\Platform;
+use App\Models\Genre;
 use App\Models\FilmUser;
 use App\Models\FilmActor;
 use App\Models\FilmGenre;
 use App\Models\FilmAward;
 use App\Models\FilmPlatform;
+use App\Models\UserGenre;
+use App\Models\UserPlatform;
 use App\Http\Controllers\Controller;
 use App\Services\FilmsService;
 use Illuminate\Http\Request;
 
 class FilmController extends Controller
 {
+    private $filmsService;
+
+    public function __construct(FilmsService $filmsService)
+    {
+        $this->filmsService = $filmsService;
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        $films = $this->filmsService->search($request)->paginate($request->get('per_page', 15));
+        return view('films.index', compact('films', 'request'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */
