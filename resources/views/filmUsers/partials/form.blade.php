@@ -163,7 +163,7 @@
     <label class="form-label" for="28checkboxNo">Experimental</label><br>
     </div>
     <div class="form-group mb-3">
-    <label class="form-label">¿Prefieres que la historia no esté basada en alguna época en concreto? Escoge todas las opciones que quieras</label><br>
+    <label class="form-label">¿Hay alguna época que no te guste? Escoge todas las opciones que quieras</label><br>
     <input type="checkbox" id="21checkboxNo" name="21checkboxNo" value="true">
     <label class="form-label" for="21checkboxNo">Antigua y anterior</label><br>
     <input type="checkbox" id="22checkboxNo" name="22checkboxNo" value="true">
@@ -176,17 +176,6 @@
     <label class="form-label" for="25checkboxNo">Futurista</label><br>
     <input type="checkbox" id="32checkboxNo" name="32checkboxNo" value="true">
     <label class="form-label" for="32checkboxNo">Atemporal o Incierto</label><br>
-    </div>
-    <div class="form-group mb-3">
-    <label class="form-label">¿A qué plataformas de streaming tienes acceso?¿A todas ;p? Selecciona todas las opciones que quieras</label><br>
-        <button type="button" class="btn btn-dark w-s" onclick="setPlatformsChecked()">
-            <img src="/pictures/icons/check.png" width="10">
-        </button>
-        <label class="form-label text-grey-500">Seleccionar todas</label><br>
-    @foreach ($platforms as $platform)
-        <input class="platformCheck" type="checkbox" id="{{ $platform->id }}checkboxPlatform" name="{{ $platform->id }}checkboxPlatform" value="true">
-        <label class="form-label" for="{{ $platform->id }}checkboxPlatform">{{ $platform->name }}</label><br>
-    @endforeach
     </div>
 
     <?php

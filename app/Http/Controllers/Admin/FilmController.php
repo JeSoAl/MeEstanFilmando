@@ -83,10 +83,14 @@ class FilmController extends Controller
         // Iterar $request->input('genres')
         if ($request->input('genres')) {
             foreach ($request->input('genres') as $key => $value) {
-                $filmGenre = new FilmGenre();
-                $filmGenre->genre_id = $value['genre_id'];
-                $filmGenre->film_id = $film->id;
-                $filmGenre->save();
+                $existingIntermediates = FilmGenre::where('genre_id', $value['genre_id'])->where('film_id', $film->id)->get();
+                $size = $existingIntermediates->count();
+                if ($size == 0) {
+                    $filmGenre = new FilmGenre();
+                    $filmGenre->genre_id = $value['genre_id'];
+                    $filmGenre->film_id = $film->id;
+                    $filmGenre->save();
+                }
             }
         }
 
@@ -101,10 +105,14 @@ class FilmController extends Controller
                     }
                 }
                 if ($actor_id >= 0) {
-                    $filmActor = new FilmActor();
-                    $filmActor->actor_id = $actor_id;
-                    $filmActor->film_id = $film->id;
-                    $filmActor->save();
+                    $existingIntermediates = FilmActor::where('actor_id', $actor_id)->where('film_id', $film->id)->get();
+                    $size = $existingIntermediates->count();
+                    if ($size == 0) {
+                        $filmActor = new FilmActor();
+                        $filmActor->actor_id = $actor_id;
+                        $filmActor->film_id = $film->id;
+                        $filmActor->save();
+                    }
                 }
             }
         }
@@ -112,10 +120,14 @@ class FilmController extends Controller
         // Iterar $request->input('platforms')
         if ($request->input('platforms')) {
             foreach ($request->input('platforms') as $key => $value) {
-                $filmPlatform = new FilmPlatform();
-                $filmPlatform->platform_id = $value['platform_id'];
-                $filmPlatform->film_id = $film->id;
-                $filmPlatform->save();
+                $existingIntermediates = FilmPlatform::where('platform_id', $value['platform_id'])->where('film_id', $film->id)->get();
+                $size = $existingIntermediates->count();
+                if ($size == 0) {
+                    $filmPlatform = new FilmPlatform();
+                    $filmPlatform->platform_id = $value['platform_id'];
+                    $filmPlatform->film_id = $film->id;
+                    $filmPlatform->save();
+                }
             }
         }
 
@@ -129,31 +141,6 @@ class FilmController extends Controller
                 $filmAward->save();
             }
         }
-
-        /* FilmUser::truncate();
-        $users = User::all();
-        foreach ($users as $user) {
-            $films = Film::whereHas('genres', function($query) use ($user) { $query->whereIn('genre_id', $user->genre_ids()); }); 
-            $userGenres = UserGenre::where('user_id', $user->id)->where('type', 'false');
-            foreach ($userGenres as $userGenre) {
-                $films->whereHas('genres', function($query) use ($user) { $query->where('id', '!=', $userGenre->genre_id); });
-            }
-            $userPlatforms = UserPlatform::where('user_id', $user->id);
-            foreach ($userPlatforms as $userPlatform) {
-                $films->whereHas('platforms', function($query) use ($user) { $query->where('id', $userPlatform->platform_id); });
-            }
-            $userNoFilms = UserNoFilm::where('user_id', $user->id)->where('type', 'false');
-            foreach ($userNoFilms as $userNoFilm) {
-                $films->whereHas('noFilms', function($query) use ($user) { $query->where('id', '!=', $userNoFilm->film_id); });
-            }
-            $films->inRandomOrder()->limit(15)->get(); 
-            foreach ($films as $film) {
-                $filmUser = new FilmUser();
-                $filmUser->user_id = $user->id;
-                $filmUser->film_id = $film->id;
-                $filmUser->save();
-            }
-        } */
 
         return to_route('admin.films.index');
     }
@@ -333,31 +320,6 @@ class FilmController extends Controller
                 }
             }
         }
-
-        /* FilmUser::truncate();
-        $users = User::all();
-        foreach ($users as $user) {
-            $films = Film::whereHas('genres', function($query) use ($user) { $query->whereIn('genre_id', $user->genre_ids()); }); 
-            $userGenres = UserGenre::where('user_id', $user->id)->where('type', 'false');
-            foreach ($userGenres as $userGenre) {
-                $films->whereHas('genres', function($query) use ($user) { $query->where('id', '!=', $userGenre->genre_id); });
-            }
-            $userPlatforms = UserPlatform::where('user_id', $user->id);
-            foreach ($userPlatforms as $userPlatform) {
-                $films->whereHas('platforms', function($query) use ($user) { $query->where('id', $userPlatform->platform_id); });
-            }
-            $userNoFilms = UserNoFilm::where('user_id', $user->id)->where('type', 'false');
-            foreach ($userNoFilms as $userNoFilm) {
-                $films->whereHas('noFilms', function($query) use ($user) { $query->where('id', '!=', $userNoFilm->film_id); });
-            }
-            $films->inRandomOrder()->limit(15)->get(); 
-            foreach ($films as $film) {
-                $filmUser = new FilmUser();
-                $filmUser->user_id = $user->id;
-                $filmUser->film_id = $film->id;
-                $filmUser->save();
-            }
-        } */
 
         return to_route('admin.films.index');
     }

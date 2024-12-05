@@ -14,12 +14,13 @@
     <p class="h4"><span class="text-warning">Actores: </span>
         <?php
             $i = 0;
+            $n = $film->actors->count();
         ?>
         @foreach ($film->actors as $actor)
-            @if ($i == 0)
+            @if ($i == $n - 1)
                 {{$actor->name}}
             @else
-                , {{$actor->name}}
+                {{$actor->name}},
             @endif
             <?php
                 $i++;
@@ -32,12 +33,13 @@
     <p class="h4"><span class="text-warning">Géneros: </span>
         <?php
             $i = 0;
+            $n = $film->genres->count();
         ?>
         @foreach ($film->genres as $genre)
-            @if ($i == 0)
+            @if ($i == $n - 1)
                 {{$genre->name}}
             @else
-                , {{$genre->name}}
+                {{$genre->name}},
             @endif
             <?php
                 $i++;
@@ -50,12 +52,13 @@
     <p class="h4"><span class="text-warning">¿Dónde ver? </span>
         <?php
             $i = 0;
+            $n = $film->platforms->count();
         ?>
         @foreach ($film->platforms as $platform)
-            @if ($i == 0)
+            @if ($i == $n - 1)
                 {{$platform->name}}
             @else
-                , {{$platform->name}}
+                {{$platform->name}},
             @endif
             <?php
                 $i++;

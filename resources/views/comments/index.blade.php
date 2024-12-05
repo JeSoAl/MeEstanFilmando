@@ -34,10 +34,10 @@
                     <div class="row w-auto mt-3">
                     @if ($user->id == $comment->user_id)
                         <div class="col-8 bg-warning rounded offset-4 text-black">
-                          <p><b>{{$comment->user->name}}</b> <span class="text-light">({{$comment->user->email}})</span></p>
+                          <p><b>{{$comment->user->name}}</b> <span class="text-light">({{$comment->user_id}})</span></p>
                     @else
                         <div class="col-8 bg-light rounded text-black">
-                          <p><b>{{$comment->user->name}}</b> <span class="text-warning">({{$comment->user->email}})</span></p>
+                          <p><b>{{$comment->user->name}}</b> <span class="text-warning">({{$comment->user_id}})</span></p>
                     @endif
                         <p>{{$comment->content}}</p>
                         <p class="text-dark">{{date('d/m/Y', strtotime($comment->created_at))}}</p>

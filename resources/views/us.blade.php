@@ -44,6 +44,8 @@
                         accumsan blandit hendrerit torquent vel risus fringilla nibh per semper a, vivamus neque fermentum
                         ridiculus rhoncus fames velit netus tincidunt eros litora.
                     </p>
+                    <br>
+                    <a href="{{ route('dashboard') }}" class="text me-4 text-warning">Inicio</a>
                 </div>
             </div>
         </div>

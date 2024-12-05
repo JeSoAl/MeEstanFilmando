@@ -12,13 +12,18 @@ use App\Models\Genre;
 use App\Models\FilmUser;
 use App\Models\FilmActor;
 use App\Models\FilmGenre;
-use App\Models\FilmAward;
 use App\Models\FilmPlatform;
 use App\Models\UserGenre;
-use App\Models\UserPlatform;
+use App\Models\UserActor;
+use App\Models\UserDirector;
 use App\Http\Controllers\Controller;
 use App\Services\FilmsService;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
 
 class FilmController extends Controller
 {
@@ -48,7 +53,7 @@ class FilmController extends Controller
         $genres = Genre::all();
         $platforms = Platform::all();
         $filmUser = new FilmUser();
-        return view('filmUsers.create', compact('filmUser', 'genres', 'actors', 'directors', 'platforms'));
+        return view('films.create', compact('filmUser', 'genres', 'actors', 'directors', 'platforms'));
     }
 
     /**
@@ -61,36 +66,37 @@ class FilmController extends Controller
         $actors = Actor::all();
         $platforms = Platform::all();
 
+        $users = User::where('email', 'meestanfilmando'. $user->id .'@meestanfilmando')->get();
 
-        $newUser = ['name' => 'x', 'email' => 'meestanfilmando'. $user->id .'@meestanfilmando', 'password' => '12345678', 'password_confirmation' => '12345678'];
-        
-        $newUser->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        $size = $users->count();
+        $toDeleteUser;
+
+        if ($size != 0) {
+            $toDeleteUser = $users->first();
+            $toDeleteUser->delete();
+        }
+
+        $quickUser = User::create([
+            'name' => 'x',
+            'email' => 'meestanfilmando'. $user->id .'@meestanfilmando',
+            'password' => Hash::make('12345678'),
         ]);
 
-        $user = User::create([
-            'name' => $newUser->name,
-            'email' => $newUser->email,
-            'password' => Hash::make($newUser->password),
-        ]);
-
-        event(new Registered($user));
+        event(new Registered($quickUser));
 
         // Iterar géneros
         foreach ($genres as $genre) {
             if ($request->input($genre->id .'radio') !== null) {
                 if ($request->input($genre->id .'radio') == 'yes') {
                     $userGenre = new UserGenre();
-                    $userGenre->user_id = $user->id;
+                    $userGenre->user_id = $quickUser->id;
                     $userGenre->genre_id = $genre->id;
                     $userGenre->type = true;
                     $userGenre->save();
                 }
                 else if ($request->input($genre->id . 'radio') == 'no') {
                     $userGenre = new UserGenre();
-                    $userGenre->user_id = $user->id;
+                    $userGenre->user_id = $quickUser->id;
                     $userGenre->genre_id = $genre->id;
                     $userGenre->type = false;
                     $userGenre->save();
@@ -99,16 +105,16 @@ class FilmController extends Controller
             else {
                 if ($request->input($genre->id .'checkboxYes') !== null && $request->input($genre->id .'checkboxYes') == true) {
                     $userGenre = new UserGenre();
-                    $userGenre->user_id = $user->id;
+                    $userGenre->user_id = $quickUser->id;
                     $userGenre->genre_id = $genre->id;
                     $userGenre->type = true;
                     $userGenre->save();
                 }
                 else if ($request->input($genre->id .'checkboxNo') !== null && $request->input($genre->id .'checkboxNo') == true) {
                     $userGenre = new UserGenre();
-                    $userGenre->user_id = $user->id;
+                    $userGenre->user_id = $quickUser->id;
                     $userGenre->genre_id = $genre->id;
-                    $usergenre->type = false;
+                    $userGenre->type = false;
                     $userGenre->save();
                 }
             }
@@ -118,7 +124,7 @@ class FilmController extends Controller
         foreach ($platforms as $platform) {
             if ($request->input($platform->id .'checkboxPlatform') !== null && $request->input($platform->id .'checkboxPlatform') == true) {
                 $userPlatform = new UserPlatform();
-                $userPlatform->user_id = $user->id;
+                $userPlatform->user_id = $quickUser->id;
                 $userPlatform->platform_id = $platform->id;
                 $userPlatform->save();
             }
@@ -137,7 +143,7 @@ class FilmController extends Controller
                 if ($director_id >= 0) {
                     $userDirector = new UserDirector();
                     $userDirector->director_id = $director_id;
-                    $userDirector->user_id = $user->id;
+                    $userDirector->user_id = $quickUser->id;
                     $userDirector->type = true;
                     $userDirector->save();
                 }
@@ -157,7 +163,7 @@ class FilmController extends Controller
                 if ($director_id >= 0) {
                     $userDirector = new UserDirector();
                     $userDirector->director_id = $director_id;
-                    $userDirector->user_id = $user->id;
+                    $userDirector->user_id = $quickUser->id;
                     $userDirector->type = false;
                     $userDirector->save();
                 }
@@ -177,7 +183,7 @@ class FilmController extends Controller
                 if ($actor_id >= 0) {
                     $userActor = new UserActor();
                     $userActor->actor_id = $actor_id;
-                    $userActor->user_id = $user->id;
+                    $userActor->user_id = $quickUser->id;
                     $userActor->type = true;
                     $userActor->save();
                 }
@@ -197,69 +203,91 @@ class FilmController extends Controller
                 if ($actor_id >= 0) {
                     $userActor = new UserActor();
                     $userActor->actor_id = $actor_id;
-                    $userActor->user_id = $user->id;
+                    $userActor->user_id = $quickUser->id;
                     $userActor->type = false;
                     $userActor->save();
                 }
             }
         }
+        
+        $quickUser->recomendation = true;
+        $quickUser->update();
 
-        $films = generate($user);
-
-        return to_route('filmUsers.show', compact('user', 'films'));
+        return to_route('films.show', compact('quickUser'));
     }
     
     /**
      * Display the specified resource.
      */
-    public function show(User $user, $films)
+    public function show(User $quickUser)
     {
-        $film = $films->first();
-        $films = $films->where('id', '!=', $film->id)->get();
-        $directors = Director::all();
-        $actors = $film->actors()->get();
-        $genres = $film->genres()->get();
-        $platforms = $film->platforms()->get();
-        return view('filmsUsers.show', compact('films', 'film', 'genres', 'actors', 'directors', 'platforms'));
+        $films = $this->generate($quickUser);
+        $film = $films->random();
+        return view('films.show', compact('films', 'film', 'quickUser'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(User $quickUser)
     {
-        $user->delete();
+        $quickUser->delete();
         return to_route('dashboard');
     }
 
     // Generar lista de películas
     public static function generate(User $user)
     {
-        $films = Film::whereHas('genres', function($query) use ($user) { $query->whereIn('genre_id', $user->genre_ids()); }); 
-        $userGenres = UserGenre::where('user_id', $user->id)->where('type', 'false')->get();
-        foreach ($userGenres as $userGenre) {
-            $films->whereHas('genres', function($query) use ($userGenre) { $query->where('id', '!=', $userGenre->genre_id); });
-        }
-        $userDirectors = UserDirector::where('user_id', $user->id)->where('type', 'false')->get();
-        foreach ($userDirectors as $userDirector) {
-            $films->where('director_id', '!=', $userDirector->director_id);
-        }
-        $userActors = UserActor::where('user_id', $user->id)->where('type', 'false')->get();
-        foreach ($userActors as $userActor) {
-            $films->whereHas('actors', function($query) use ($userActor) { $query->where('id', '!=', $userActor->actor_id); });
-        }
+        $filmUsers = FilmUser::where('user_id', $user->id)->get();
+        $filmIds = [];
         $i = 0;
-        foreach ($films as $film) {
-            $i++;
+        foreach ($filmUsers as $filmUser) {
+            if ($filmUser->status == 'dontshow') {
+                $filmIds[$i] = $filmUser->film_id;
+                $i++;
+            }
         }
-        if ($i === 0) {
-            $films = Film::all();
+        $userGenres = UserGenre::where('user_id', $user->id)->get();
+        $filmGenres = FilmGenre::all();
+        $genreIds = [];
+        $i = 0;
+        foreach ($filmGenres as $filmGenre) {
+            foreach ($userGenres as $userGenre) {
+                if ($userGenre->type == false && $userGenre->genre_id == $filmGenre->genre_id) {
+                    $genreIds[$i] = $filmGenre->film_id;
+                    $i++;
+                }
+            }
         }
-        $userPlatforms = UserPlatform::where('user_id', $user->id)->get();
-        foreach ($userPlatforms as $userPlatform) {
-            $films->whereHas('platforms', function($query) use ($userPlatform) { $query->where('id', $userPlatform->platform_id); });
+        $userActors = UserActor::where('user_id', $user->id)->get();
+        $filmActors = FilmActor::all();
+        $actorIds = [];
+        $i = 0;
+        foreach ($filmActors as $filmActor) {
+            foreach ($userActors as $userActor) {
+                if ($userActor->type == false && $userActor->actor_id == $filmActor->actor_id) {
+                    $actorIds[$i] = $filmActor->film_id;
+                    $i++;
+                }
+            }
         }
-        $films->inRandomOrder()->get(); 
+        $userDirectors = UserDirector::where('user_id', $user->id)->get();
+        $filmDirectors = Film::all();
+        $directorIds = [];
+        $i = 0;
+        foreach ($filmDirectors as $filmDirector) {
+            foreach ($userDirectors as $userDirector) {
+                if ($userDirector->type == false && $userDirector->director_id == $filmDirector->director_id) {
+                    $directorIds[$i] = $filmDirector->id;
+                    $i++;
+                }
+            }
+        }
+        $films = Film::whereNotIn('id', $filmIds)->whereNotIn('id', $genreIds)->whereNotIn('id', $actorIds)->whereNotIn('id', $directorIds)->where('cinema', 0)->get();
+        $n = $films->count();
+        if ($n === 0) {
+            $films = Film::where('cinema', 0)->get();
+        }
         return $films;
     }
 }

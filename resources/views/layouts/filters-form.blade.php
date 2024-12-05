@@ -2,184 +2,164 @@
   <div id="card1" class="d-block">
     <div class="form-group mb-3">
     <label class="form-label">¿Te gusta reirte cuando ves una película?</label><br>
-    <input type="radio" id="4yes" name="4radio" value="yes">
+    <input type="radio" id="4yes" name="4radio" value="yes" required>
     <label class="form-label" for="4yes">Sí</label><br>
     <input type="radio" id="4no" name="4radio" value="no">
     <label class="form-label" for="4no">No</label><br>
     </div>
     <div class="form-group mb-3">
     <label class="form-label">¿Te gusta que una película te conmueva?</label><br>
-    <input type="radio" id="5yes" name="5radio" value="yes">
+    <input type="radio" id="5yes" name="5radio" value="yes" required>
     <label class="form-label" for="5yes">Sí</label><br>
     <input type="radio" id="5no" name="5radio" value="no">
     <label class="form-label" for="5no">No</label><br>
     </div>
     <div class="form-group mb-3">
     <label class="form-label">¿Te gustan las historias de acción?</label><br>
-    <input type="radio" id="6yes" name="6radio" value="yes">
+    <input type="radio" id="6yes" name="6radio" value="yes" required>
     <label class="form-label" for="6yes">Sí</label><br>
     <input type="radio" id="6no" name="6radio" value="no">
     <label class="form-label" for="6no">No</label><br>
     </div>
     <div class="form-group mb-3">
     <label class="form-label">¿Te gustan las historias de amor?</label><br>
-    <input type="radio" id="17yes" name="17radio" value="yes">
+    <input type="radio" id="17yes" name="17radio" value="yes" required>
     <label class="form-label" for="17yes">Sí</label><br>
     <input type="radio" id="17no" name="17radio" value="no">
     <label class="form-label" for="17no">No</label><br>
     </div>
     <div class="form-group mb-3">
     <label class="form-label">¿Te gustan las aventuras?</label><br>
-    <input type="radio" id="8yes" name="8radio" value="yes">
+    <input type="radio" id="8yes" name="8radio" value="yes" required>
     <label class="form-label" for="8yes">Sí</label><br>
     <input type="radio" id="8no" name="8radio" value="no">
     <label class="form-label" for="8no">No</label><br>
     </div>
     <div class="form-group mb-3">
     <label class="form-label">¿Te gusta adentrarte en mundos de fantasía?</label><br>
-    <input type="radio" id="9yes" name="9radio" value="yes">
+    <input type="radio" id="9yes" name="9radio" value="yes" required>
     <label class="form-label" for="9yes">Sí</label><br>
     <input type="radio" id="9no" name="9radio" value="no">
     <label class="form-label" for="9no">No</label><br>
     </div>
     <div class="ms-auto row justify-content-between">
-        <button type="button" class="btn btn-light col-3 offset-9 d-flex justify-content-end align-self-end w-md" onclick="secondCard()">
-            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-        </button>
+        <button type="button" class="btn btn-light col-2 offset-10 d-flex justify-content-center align-self-end w-md" onclick="secondCard()">&#8250;</button>
     </div>
   </div>
   <div id="card2" class="d-none">
     <div class="form-group mb-3">
     <label class="form-label">¿Qué te parece que la ficción se fundamente en la ciencia?</label><br>
-    <input type="radio" id="7yes" name="7radio" value="yes">
+    <input type="radio" id="7yes" name="7radio" value="yes" required>
     <label class="form-label" for="7yes">Me gusta la Ciencia Ficción!</label><br>
     <input type="radio" id="7no" name="7radio" value="no">
     <label class="form-label" for="7no">Aborrezco la Ciencia Ficción</label><br>
     </div>
     <div class="form-group mb-3">
     <label class="form-label">¿Querrías ver películas de superhéroes?</label><br>
-    <input type="radio" id="15yes" name="15radio" value="yes">
+    <input type="radio" id="15yes" name="15radio" value="yes" required>
     <label class="form-label" for="15yes">Sí</label><br>
     <input type="radio" id="15no" name="15radio" value="no">
     <label class="form-label" for="15no">No</label><br>
     </div>
     <div class="form-group mb-3">
     <label class="form-label">¿Te gusta que una película te haga pasar miedo?</label><br>
-    <input type="radio" id="12yes" name="12radio" value="yes">
+    <input type="radio" id="12yes" name="12radio" value="yes" required>
     <label class="form-label" for="12yes">Sí</label><br>
     <input type="radio" id="12no" name="12radio" value="no">
     <label class="form-label" for="12no">No</label><br>
     </div>
     <div class="form-group mb-3">
     <label class="form-label">¿Te parece bien estar en tensión cuando ves una película?</label><br>
-    <input type="radio" id="11yes" name="11radio" value="yes">
+    <input type="radio" id="11yes" name="11radio" value="yes" required>
     <label class="form-label" for="11yes">Sí</label><br>
     <input type="radio" id="11no" name="11radio" value="no">
     <label class="form-label" for="11no">No</label><br>
     </div>
     <div class="form-group mb-3">
     <label class="form-label">¿Te gusta resolver misterios?</label><br>
-    <input type="radio" id="31yes" name="31radio" value="yes">
+    <input type="radio" id="31yes" name="31radio" value="yes" required>
     <label class="form-label" for="31yes">Sí</label><br>
     <input type="radio" id="31no" name="31radio" value="no">
     <label class="form-label" for="31no">No</label><br>
     </div>
     <div class="form-group mb-3">
     <label class="form-label">¿Qué opinión te merece el género policiaco?</label><br>
-    <input type="radio" id="13yes" name="13radio" value="yes">
+    <input type="radio" id="13yes" name="13radio" value="yes" required>
     <label class="form-label" for="13yes">Correcto, adelante con él</label><br>
     <input type="radio" id="13no" name="13radio" value="no">
     <label class="form-label" for="13no">Que mejor no</label><br>
     </div>
     <div class="ms-auto row justify-content-between">
-        <button type="button" class="btn btn-light col-3 d-flex justify-content-start align-self-end w-md" onclick="firstCard()">
-            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-        </button>
-        <button type="button" class="btn btn-light col-3 d-flex justify-content-end align-self-end w-md" onclick="thirdCard()">
-            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-        </button>
+        <button type="button" class="btn btn-light col-2 d-flex justify-content-center align-self-end w-md" onclick="firstCard()">&#8249;</button>
+        <button type="button" class="btn btn-light col-2 offset-8 d-flex justify-content-center align-self-end w-md" onclick="thirdCard()">&#8250;</button>
     </div>
   </div>
   <div id="card3" class="d-none">
     <div class="form-group mb-3">
     <label class="form-label">¿Te gustan las historias de criminales?</label><br>
-    <input type="radio" id="20yes" name="20radio" value="yes">
+    <input type="radio" id="20yes" name="20radio" value="yes" required>
     <label class="form-label" for="20yes">Sí</label><br>
     <input type="radio" id="20no" name="20radio" value="no">
     <label class="form-label" for="20no">No</label><br>
     </div>
     <div class="form-group mb-3">
     <label class="form-label">¿Querrías ver películas bélicas?</label><br>
-    <input type="radio" id="19yes" name="19radio" value="yes">
+    <input type="radio" id="19yes" name="19radio" value="yes" required>
     <label class="form-label" for="19yes">Sí</label><br>
     <input type="radio" id="19no" name="19radio" value="no">
     <label class="form-label" for="19no">No</label><br>
     </div>
     <div class="form-group mb-3">
     <label class="form-label">¿Te gustan los westerns?</label><br>
-    <input type="radio" id="16yes" name="16radio" value="yes">
+    <input type="radio" id="16yes" name="16radio" value="yes" required>
     <label class="form-label" for="16yes">Sí</label><br>
     <input type="radio" id="16no" name="16radio" value="no">
     <label class="form-label" for="16no">No</label><br>
     </div>
     <div class="form-group mb-3">
     <label class="form-label">¿Te gustan los musicales?</label><br>
-    <input type="radio" id="26yes" name="26radio" value="yes">
+    <input type="radio" id="26yes" name="26radio" value="yes" required>
     <label class="form-label" for="26yes">Sí</label><br>
     <input type="radio" id="26no" name="26radio" value="no">
     <label class="form-label" for="26no">No</label><br>
     </div>
     <div class="form-group mb-3">
     <label class="form-label">¿Te gustan las películas que plantean debates filosóficos?</label><br>
-    <input type="radio" id="10yes" name="10radio" value="yes">
+    <input type="radio" id="10yes" name="10radio" value="yes" required>
     <label class="form-label" for="10yes">Sí</label><br>
     <input type="radio" id="10no" name="10radio" value="no">
     <label class="form-label" for="10no">No</label><br>
     </div>
     <div class="form-group mb-3">
     <label class="form-label">¿Te gustan las películas que tratan algún tema deportivo?</label><br>
-    <input type="radio" id="30yes" name="30radio" value="yes">
+    <input type="radio" id="30yes" name="30radio" value="yes" required>
     <label class="form-label" for="30yes">Sí</label><br>
     <input type="radio" id="30no" name="30radio" value="no">
     <label class="form-label" for="30no">No</label><br>
     </div>
     <div class="ms-auto row justify-content-between">
-        <button type="button" class="btn btn-light col-3 d-flex justify-content-start align-self-end w-md" onclick="secondCard()">
-            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-        </button>
-        <button type="button" class="btn btn-light col-3 d-flex justify-content-end align-self-end w-md" onclick="fourthCard()">
-            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-        </button>
+        <button type="button" class="btn btn-light col-2 d-flex justify-content-center align-self-end w-md" onclick="secondCard()">&#8249;</button>
+        <button type="button" class="btn btn-light  col-2 offset-8 d-flex justify-content-center align-self-end w-md" onclick="fourthCard()">&#8250;</button>
     </div>
   </div>
   <div id="card4" class="d-none">
     <div class="form-group mb-3">
     <label class="form-label">¿Te gustaría ver películas de animación?</label><br>
-    <input type="radio" id="14yes" name="14radio" value="yes">
+    <input type="radio" id="14yes" name="14radio" value="yes" required>
     <label class="form-label" for="14yes">Sí</label><br>
     <input type="radio" id="14no" name="14radio" value="no">
     <label class="form-label" for="14no">No, eso es para niños</label><br>
     </div>
     <div class="form-group mb-3">
     <label class="form-label">¿Tendrías algún problema en ver una película larga?</label><br>
-    <input type="radio" id="29yes" name="29radio" value="yes">
+    <input type="radio" id="29yes" name="29radio" value="yes" required>
     <label class="form-label" for="29yes">No me importa ver una película larga</label><br>
     <input type="radio" id="29no" name="29radio" value="no">
     <label class="form-label" for="29no">Películas cortas, gracias</label><br>
     </div>
     <div class="form-group mb-3">
     <label class="form-label">¿Te importaría ver una saga?¿O sólo quieres ver películas individuales?</label><br>
-    <input type="radio" id="27yes" name="27radio" value="yes">
+    <input type="radio" id="27yes" name="27radio" value="yes" required>
     <label class="form-label" for="27yes">Las sagas están bien</label><br>
     <input type="radio" id="27no" name="27radio" value="no">
     <label class="form-label" for="27no">No, sagas no</label><br>
@@ -201,16 +181,8 @@
     <label class="form-label" for="28checkboxNo">Experimental</label><br>
     </div>
     <div class="ms-auto row justify-content-between">
-        <button type="button" class="btn btn-light col-3 d-flex justify-content-start align-self-end w-md" onclick="thirdCard()">
-            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-        </button>
-        <button type="button" class="btn btn-light col-3 d-flex justify-content-end align-self-end w-md" onclick="fifthCard()">
-            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-        </button>
+        <button type="button" class="btn btn-light col-2 d-flex justify-content-center align-self-end w-md" onclick="thirdCard()">&#8249;</button>
+        <button type="button" class="btn btn-light  col-2 offset-8 d-flex justify-content-center align-self-end w-md" onclick="fifthCard()">&#8250;</button>
     </div>
   </div>
 
@@ -251,17 +223,14 @@
         </button>
     </div>
     <div class="ms-auto row justify-content-between">
-        <button type="button" class="btn btn-light col-3 d-flex justify-content-start align-self-end w-md" onclick="fourthCard()">
-            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-        </button>
+        <button type="button" class="btn btn-light col-2 d-flex justify-content-center align-self-end w-md" onclick="fourthCard()">&#8249;</button>
         <div class="col-3 d-flex justify-content-end align-self-end w-md">
             @include('layouts.create-buttons')
         </div>
     </div>
   </div>
 </x-admin-card>
+<a href="{{ route('dashboard') }}" class="text text-warning me-4 align-self-end">Cancelar</a>
 
 <script>
     function firstCard() {

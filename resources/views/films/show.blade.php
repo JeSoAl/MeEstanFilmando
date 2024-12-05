@@ -7,22 +7,18 @@
       </div>
     </x-slot>
 
-    <?php
-      $user = Auth::user();
-    ?>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-white">
                     <div class="row">
                         <p>
-                        @foreach ($array as $cosa)
+                        @foreach ($films as $cosa)
                             [{{$cosa->title}}], 
                         @endforeach
                         </p>
                         @include('layouts.show-film')
-                        @include('filmUsers.partials.show-buttons')
+                        @include('films.partials.show-buttons')
                     </div>
                 </div>
             </div>

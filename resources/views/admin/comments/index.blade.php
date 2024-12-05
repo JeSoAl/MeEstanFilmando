@@ -2,11 +2,8 @@
     <x-slot name="header">
       <div class="flex">
         <h2 class="font-semibold text-xl text-warning leading-tight flex">
-            {{ __('Opiniones') }}
+            {{ __('Comentarios') }}
         </h2>
-        <div class="ms-auto flex" align="right">
-          <a href="{{ route('admin.comments.create') }}" class="btn btn-sm btn-warning">Crear nuevo galardón</a>
-        </div>
       </div>
     </x-slot>
 
@@ -25,7 +22,7 @@
                           <th>ID</th>
                           <th>Usuario</th>
                           <th>Película</th>
-                          <th>Borrar</th>
+                          <th>Acciones</th>
                         </tr>
                       </thead>
 
@@ -36,6 +33,9 @@
                           <td>{{ $comment->user_id ? $comment->user->name : '' }}</td>
                           <td>{{ $comment->film_id ? $comment->film->title : '' }}</td>
                           <td class="d-flex">
+                            <a href="{{ route('admin.comments.show', $comment) }}" class="btn btn-warning text-light btn-sm me-1 align-self-end">
+                              <img src="/pictures/icons/eye.png" width="15">
+                            </a>
                             <form action="{{ route('admin.comments.destroy', $comment) }}" method="POST" class="me-1"
                               data-confirm="¿Está seguro de eliminar el elemento seleccionado?">
                               @csrf

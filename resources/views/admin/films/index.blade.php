@@ -42,7 +42,9 @@
                           <td>{{ $film->duration ? $film->duration : '' }}</td>
                           <td>{{ $film->year ? $film->year : '' }}</td>
                           <td class="d-flex">
-                            <a href="{{ route('admin.films.show', $film) }}" class="btn btn-warning text-light btn-sm me-1">ver</a>
+                            <a href="{{ route('admin.films.show', $film) }}" class="btn btn-warning text-light btn-sm me-1">
+                              <img src="/pictures/icons/eye.png" width="15">
+                            </a>
                             <a href="{{ route('admin.films.edit', $film) }}" class="btn btn-primary btn-sm me-1">
                               <img src="/pictures/icons/edit.png" width="15">
                             </a>

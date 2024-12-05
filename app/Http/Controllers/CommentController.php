@@ -14,7 +14,7 @@ class CommentController extends Controller
      */
     public function index(Film $film)
     {
-        $comments = Comment::where('film_id', $film->id)->get();
+        $comments = Comment::where('film_id', $film->id)->get()->reverse()->values();
         return view('comments.index', compact('comments', 'film'));
     }
 

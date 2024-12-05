@@ -40,10 +40,11 @@ Route::post('/users/{user}/destroy', [UserController::class, 'destroy'])->name('
 Route::get('/films', [FilmController::class, 'index'])->name('films.index');
 Route::get('/films/create', [FilmController::class, 'create'])->name('films.create');
 Route::post('/films/store', [FilmController::class, 'store'])->name('films.store');
+Route::post('/films/{user}/storeFilters', [FilmController::class, 'storeFilters'])->name('films.storeFilters');
 Route::get('/films/{film}/edit', [FilmController::class, 'edit'])->name('films.edit');
 Route::put('/films/{film}/update', [FilmController::class, 'update'])->name('films.update');
-Route::get('/films/{film}/show', [FilmController::class, 'show'])->name('films.show');
-Route::post('/films/{film}/destroy', [FilmController::class, 'destroy'])->name('films.destroy');
+Route::get('/films/{quickUser}/show', [FilmController::class, 'show'])->name('films.show');
+Route::post('/films/{quickUser}/destroy', [FilmController::class, 'destroy'])->name('films.destroy');
 
 Route::get('/filmUsers/create', [FilmUserController::class, 'create'])->name('filmUsers.create');
 Route::post('/filmUsers/{user}/storeFilters', [FilmUserController::class, 'storeFilters'])->name('filmUsers.storeFilters');

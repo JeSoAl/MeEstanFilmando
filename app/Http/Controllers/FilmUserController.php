@@ -46,6 +46,8 @@ class FilmUserController extends Controller
         $directors = Director::all();
         $actors = Actor::all();
         $platforms = Platform::all();
+        
+        $this->destroyFilters($user);
 
         // Iterar géneros
         foreach ($genres as $genre) {
@@ -172,6 +174,59 @@ class FilmUserController extends Controller
                 }
             }
         }
+
+        $wrongGenres1 = UserGenre::where('user_id', $user->id)->where('genre_id', 1)->where('type', false)->get();
+        $wrongGenres2 = UserGenre::where('user_id', $user->id)->where('genre_id', 2)->where('type', false)->get();
+        $wrongGenres3 = UserGenre::where('user_id', $user->id)->where('genre_id', 3)->where('type', false)->get();
+        $spanish = $wrongGenres1->count();
+        $international = $wrongGenres2->count();
+        $hollywood = $wrongGenres3->count();
+        if ($spanish >= 1 && $international >= 1 && $hollywood >= 1) {
+            $wrongGenre1 = $wrongGenres1->first();
+            $wrongGenre2 = $wrongGenres2->first();
+            $wrongGenre3 = $wrongGenres3->first();
+            $wrongGenre1->delete();
+            $wrongGenre2->delete();
+            $wrongGenre3->delete();
+        }
+
+        $wrongGenres1 = UserGenre::where('user_id', $user->id)->where('genre_id', 18)->where('type', false)->get();
+        $wrongGenres2 = UserGenre::where('user_id', $user->id)->where('genre_id', 28)->where('type', false)->get();
+        $classic = $wrongGenres1->count();
+        $experimental = $wrongGenres2->count();
+        if ($classic >= 1 && $experimental >= 1) {
+            $wrongGenre1 = $wrongGenres1->first();
+            $wrongGenre2 = $wrongGenres2->first();
+            $wrongGenre1->delete();
+            $wrongGenre2->delete();
+        }
+
+        $wrongGenres1 = UserGenre::where('user_id', $user->id)->where('genre_id', 21)->where('type', false)->get();
+        $wrongGenres2 = UserGenre::where('user_id', $user->id)->where('genre_id', 22)->where('type', false)->get();
+        $wrongGenres3 = UserGenre::where('user_id', $user->id)->where('genre_id', 23)->where('type', false)->get();
+        $wrongGenres4 = UserGenre::where('user_id', $user->id)->where('genre_id', 24)->where('type', false)->get();
+        $wrongGenres5 = UserGenre::where('user_id', $user->id)->where('genre_id', 25)->where('type', false)->get();
+        $wrongGenres6 = UserGenre::where('user_id', $user->id)->where('genre_id', 32)->where('type', false)->get();
+        $ancient = $wrongGenres1->count();
+        $medieval = $wrongGenres2->count();
+        $modern = $wrongGenres3->count();
+        $present = $wrongGenres4->count();
+        $future = $wrongGenres5->count();
+        $atemporal = $wrongGenres6->count();
+        if ($ancient >= 1 && $medieval >= 1 && $modern >= 1 && $present >= 1 && $future >= 1 && $atemporal >= 1) {
+            $wrongGenre1 = $wrongGenres1->first();
+            $wrongGenre2 = $wrongGenres2->first();
+            $wrongGenre3 = $wrongGenres3->first();
+            $wrongGenre4 = $wrongGenres4->first();
+            $wrongGenre5 = $wrongGenres5->first();
+            $wrongGenre6 = $wrongGenres6->first();
+            $wrongGenre1->delete();
+            $wrongGenre2->delete();
+            $wrongGenre3->delete();
+            $wrongGenre4->delete();
+            $wrongGenre5->delete();
+            $wrongGenre6->delete();
+        }
         
         $user->recomendation = true;
         $user->update();
@@ -259,12 +314,10 @@ class FilmUserController extends Controller
      */
     public function destroyAll(User $user)
     {
-        $filmUsers = FilmUser::where('user_id', $user->id)->where('status', 'dontshow');
+        $filmUsers = FilmUser::where('user_id', $user->id)->where('status', 'dontshow')->get();
         foreach ($filmUsers as $filmUser) {
             $filmUser->delete();
         }
-        $user->recomendation = false;
-        $user->update();
         
         return to_route('dashboard');
     }
@@ -282,7 +335,9 @@ class FilmUserController extends Controller
         $userActors = UserActor::all();
 
         // Eliminar filtrado
-        $filmUser->delete();
+        if ($filmUser != null) {
+            $filmUser->delete();
+        }
 
         foreach ($userGenres as $userGenre) {
             if ($userGenre->user_id == $user->id) {
@@ -304,13 +359,6 @@ class FilmUserController extends Controller
                 $userActor->delete();
             }
         }
-
-        $directors = Director::all();
-        $actors = Actor::all();
-        $genres = Genre::all();
-        $platforms = Platform::all();
-        $filmUser = new FilmUser();
-        return to_route('filmUsers.create', compact('filmUser', 'genres', 'actors', 'directors', 'platforms'));
     }
 
     // Generar lista de películas
@@ -325,15 +373,46 @@ class FilmUserController extends Controller
                 $i++;
             }
         }
-        $films = Film::whereNotIn('id', $filmIds)->where('cinema', 0);
-        $userGenres = UserGenre::where('user_id', $user->id)->where('type', 'false')->get();
-        foreach ($userGenres as $userGenre) {
-            $films->whereHas('genres', function($query) use ($userGenre) { $query->where('id', '!=', $userGenre->genre_id); });
+        $userGenres = UserGenre::where('user_id', $user->id)->get();
+        $filmGenres = FilmGenre::all();
+        $genreIds = [];
+        $i = 0;
+        foreach ($filmGenres as $filmGenre) {
+            foreach ($userGenres as $userGenre) {
+                if ($userGenre->type == false && $userGenre->genre_id == $filmGenre->genre_id) {
+                    $genreIds[$i] = $filmGenre->film_id;
+                    $i++;
+                }
+            }
         }
-        $films->get();
+        $userActors = UserActor::where('user_id', $user->id)->get();
+        $filmActors = FilmActor::all();
+        $actorIds = [];
+        $i = 0;
+        foreach ($filmActors as $filmActor) {
+            foreach ($userActors as $userActor) {
+                if ($userActor->type == false && $userActor->actor_id == $filmActor->actor_id) {
+                    $actorIds[$i] = $filmActor->film_id;
+                    $i++;
+                }
+            }
+        }
+        $userDirectors = UserDirector::where('user_id', $user->id)->get();
+        $filmDirectors = Film::all();
+        $directorIds = [];
+        $i = 0;
+        foreach ($filmDirectors as $filmDirector) {
+            foreach ($userDirectors as $userDirector) {
+                if ($userDirector->type == false && $userDirector->director_id == $filmDirector->director_id) {
+                    $directorIds[$i] = $filmDirector->id;
+                    $i++;
+                }
+            }
+        }
+        $films = Film::whereNotIn('id', $filmIds)->whereNotIn('id', $genreIds)->whereNotIn('id', $actorIds)->whereNotIn('id', $directorIds)->where('cinema', 0)->get();
         $n = $films->count();
         if ($n === 0) {
-            $films = Film::where('cinema', 0)->get();
+            $films = Film::whereNotIn('id', $filmIds)->where('cinema', 0)->get();
         }
         return $films;
     }

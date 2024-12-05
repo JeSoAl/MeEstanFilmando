@@ -26,6 +26,14 @@ class CommentController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(Comment $comment)
+    {
+        return view('admin.comments.show', compact('comment'));
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Comment $comment)

@@ -17,7 +17,7 @@
                     <a
                         href="{{ route('comments.index', $film) }}"
                         style="text-decoration:none;"
-                        class="rounded-md row px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                        class="rounded-md h-25 row px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                     >
                         <section class="col-12 justify-content-around bg-light display-6 rounded-pill">
                             {{$film->title}}

@@ -9,6 +9,6 @@
     <button type="submit" class="btn btn-warning w-md">Subir</button>
   </div>
   <div class="col-12 align-self-end">
-    <a href="{{ route('films.index') }}" class="text me-4 text-warning">Volver</a>
+    <a href="{{ url()->previous() }}" class="text me-4 text-warning">Volver</a>
   </div>
 </div>

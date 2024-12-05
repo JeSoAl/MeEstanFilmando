@@ -20,11 +20,7 @@
 
                     <div class="row">
                         <div class="col-12 col-md-12">
-                          <x-admin-card>
-                            @include('filmUsers.partials.form')
-
-                            @include('filmUsers.partials.create-buttons')
-                          </x-admin-card>
+                            @include('layouts.filters-form')
                         </div>
                     </div>
 

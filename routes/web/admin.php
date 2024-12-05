@@ -76,14 +76,6 @@ Route::put('/avatars/{avatar}/update', [AvatarController::class, 'update'])->nam
 Route::get('/avatars/{avatar}/show', [AvatarController::class, 'show'])->name('admin.avatars.show');
 Route::post('/avatars/{avatar}/destroy', [AvatarController::class, 'destroy'])->name('admin.avatars.destroy');
 
-Route::get('/admin/suscriptions', [SuscriptionController::class, 'index'])->name('admin.suscriptions.index');
-Route::get('/admin/suscriptions/create', [SuscriptionController::class, 'create'])->name('admin.suscriptions.create');
-Route::post('/admin/suscriptions/store', [SuscriptionController::class, 'store'])->name('admin.suscriptions.store');
-Route::get('/admin/suscriptions/{suscription}/edit', [SuscriptionController::class, 'edit'])->name('admin.suscriptions.edit');
-Route::put('/admin/suscriptions/{suscription}/update', [SuscriptionController::class, 'update'])->name('admin.suscriptions.update');
-Route::get('/admin/suscriptions/{suscription}/show', [SuscriptionController::class, 'show'])->name('admin.suscriptions.show');
-Route::post('/admin/suscriptions/{suscription}/destroy', [SuscriptionController::class, 'destroy'])->name('admin.suscriptions.destroy');
-
 Route::get('/admin/comments', [CommentController::class, 'index'])->name('admin.comments.index');
 Route::get('/admin/comments/create', [CommentController::class, 'create'])->name('admin.comments.create');
 Route::post('/admin/comments/store', [CommentController::class, 'store'])->name('admin.comments.store');
