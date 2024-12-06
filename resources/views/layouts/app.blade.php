@@ -30,6 +30,14 @@
             .footer {
                 flex-grow: 1;
             }   
+
+            .mainLink {
+                transition: margin-right 2s ease-in-out;
+            }
+
+            .mainLink:hover {
+                margin-right: 100px;
+            }
         </style>
 
         <!-- Scripts -->

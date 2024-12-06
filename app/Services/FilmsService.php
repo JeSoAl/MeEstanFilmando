@@ -39,7 +39,7 @@ class FilmsService {
       $films->where('year', $request->year);
     }
 
-    $films->orderByRaw($request->sort_by ?? 'films.id asc');
+    $films->orderByRaw($request->sort_by ?? 'films.title asc');
 
     return $films;
   }

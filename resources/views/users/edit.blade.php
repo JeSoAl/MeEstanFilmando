@@ -28,7 +28,7 @@
                             </div>
 
                             <div class="form-group mb-3">
-                                <label class="form-label">Avatar</label><br>
+                                <label class="form-label">Escoge el avatar que encaja con tu estilo</label><br>
                                 <?php
                                     $i = 0;
                                 ?>
@@ -39,10 +39,15 @@
                                         <div class="col">
                                     @if ($user->avatar_id == $avatar->id)
                                         <input type="radio" id="avatar{{$avatar->id}}" name="avatar_id" value="{{$avatar->id}}" checked>
+                                            <label class="form-label" for="avatar{{$avatar->id}}">
+                                                <img class="border border-warning rounded-circle" src="{{$avatar->picture}}" width="300">
                                     @else
                                         <input type="radio" id="avatar{{$avatar->id}}" name="avatar_id" value="{{$avatar->id}}">
+                                            <label class="form-label" for="avatar{{$avatar->id}}">
+                                                <img class="border border-light rounded-circle" src="{{$avatar->picture}}" width="300">
                                     @endif
-                                    <label class="form-label" for="avatar{{$avatar->id}}"><img src="{{$avatar->picture}}" width="300"></label><br>
+                                        {{$avatar->description}}
+                                    </label><br>
                                     </div>
                                     <?php
                                     $i++;
@@ -81,18 +86,16 @@
 
                     <!-- Password -->
                     <div class="mt-4">
-                        <x-input-label for="password" :value="__('Nueva Contraseña')" />
-                        <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
+                        <label for="password" class="form-label">Nueva Contraseña</label>
+                        <input class="form-control" type="password" id="password" name="password" required autocomplete="new-password">
                         <x-input-error :messages="$errors->get('password')" class="mt-2" />
                     </div>
 
                     <!-- Confirm Password -->
                     <div class="mt-4">
-                        <x-input-label for="password_confirmation" :value="__('Confirmar Contraseña Nueva')" />
-
-                        <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                                            type="password"
-                                            name="password_confirmation" required autocomplete="new-password" />
+                        <label for="password_confirmation" class="form-label">Confirmar Contraseña Nueva</label>
+                        
+                        <input class="form-control" type="password" id="password_confirmation" name="password_confirmation" required autocomplete="new-password">
 
                         <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
                     </div>
@@ -100,8 +103,8 @@
                     
                     <div class="form-group mb-3 d-flex">
                         <div class="ms-auto">
-                            <a href="{{ route('dashboard') }}" class="text me-4">Cancelar</a>
-                            <button type="submit" class="btn btn-warning w-md">Cambiar Contraseña</button>
+                            <a href="{{ route('dashboard') }}" class="text me-4 align-self-end">Cancelar</a>
+                            <button type="submit" class="btn btn-warning w-md align-self-end">Cambiar Contraseña</button>
                         </div>
                     </div>
                   </form>

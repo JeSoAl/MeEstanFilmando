@@ -29,8 +29,9 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $user->update($request->all());
+        $avatars = Avatar::all();
 
-        return to_route('dashboard');
+        return to_route('users.edit', compact('user', 'avatars'));
     }
 
     /**
